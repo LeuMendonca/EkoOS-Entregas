@@ -1,0 +1,128 @@
+.banner {
+    background-image: url("https://esales.com.br/wp-content/uploads/2022/08/post_thumbnail-17167e2d117f53637821bc29d31e52ee-2048x1152.jpeg");
+    height: 20rem;
+    display: flex;
+    background-size: auto;
+    height: 50rem;
+    width: 100%;
+    
+}
+.tabela {
+    width: 80%;
+    margin-left:280px;
+
+}
+#pesquisa {
+    width: 80%;
+    margin-left: 280px;
+    padding-left: 5rem;
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+    background-color: black;
+    opacity: 0.75;
+    color: white;
+    align-items: center;
+}
+
+#pesquisa label{
+    padding-left:20px;
+    padding-right:20px;
+}
+.botaopesquisar {
+    margin-left: 20px;    
+}
+
+#formulario {
+    width: 80%;
+    height: 80%;
+    margin-left: 5rem;
+    padding-left: 5rem;
+    padding-bottom: 5rem;
+    background-color: black;
+    opacity: 0.75;
+    color: white;
+    align-items: center;
+}
+#formulario legend{
+    text-align:center;
+}
+#formulario label{
+   display:block;
+}
+
+
+#formulario input {
+    border-radius: 10px;
+}
+
+.camponome{
+    width:300px;
+    
+}
+
+.campousuario {
+    width: 300px;
+    
+}
+.camposenha {
+    width: 200px;
+    
+}
+.campoplaca {
+    width: 100px;
+}
+.campoano {
+    width: 100px;
+}
+.botaocadastrar {
+    width:150px;
+}
+.botaoadicionar {
+    width: 100px;
+    margin-left:25px;
+}
+.campoentregadores{
+    margin-top:30px;
+    height:100px;
+}
+.campopontos {
+    width:50px;
+}
+.campodata {
+    width:150px;
+}
+
+.campoveiculo{
+    width:150px;
+
+}
+.botoes{
+  text-align:center;
+   margin-top:20px;   
+}
+.opcoes {
+    display: inline-block;
+    width: 40%;
+    padding-left:50px;
+    padding-top:50px;
+    padding-right:50px;
+    padding-bottom:50px;
+    vertical-align: top;
+    text-align: left;
+}
+
+.entregadores {
+    text-align: left;
+    display: inline-block;
+    width: 50%;
+    padding-left: 50px;
+    padding-top: 50px;
+    padding-right: 50px;
+    padding-bottom: 50px;
+    vertical-align: top;
+}
+
+.painelinferior{
+    margin-top: 80px;
+    text-align:center;        
+}

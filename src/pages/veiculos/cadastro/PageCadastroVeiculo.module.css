@@ -1,0 +1,94 @@
+.banner {
+    background-image: url("https://esales.com.br/wp-content/uploads/2022/08/post_thumbnail-17167e2d117f53637821bc29d31e52ee-2048x1152.jpeg");
+    height: calc(100vh - 4.6rem);
+    display: flex;
+    background-size: auto;
+    width: 100%;
+    justify-content: center;
+    background-size: cover;
+}
+
+.campoplaca {
+    width: 100px;
+}
+.campoano {
+    width: 100px;
+}
+.camponome{
+    width:300px;
+}
+.tabela {
+    width: 80%;
+}
+.botaocadastrar {
+    border: none;
+    border-radius: .2rem;
+    padding: .7rem 4rem;
+    cursor: pointer;
+    opacity: .8;
+    transition: all .2s;
+}
+
+.botaocadastrar:hover{
+    opacity: 1;
+}
+
+.botoes{
+    text-align: center;
+    margin-top: 20px;   
+}
+
+#formulario {
+    width: 80%;
+    margin-left: 5rem;
+    background-color: black;
+    opacity: 0.75;
+    color: white;
+    align-items: center;
+    margin-top: 2rem;
+    padding: 50px 20px;
+    position: relative;
+}
+#formulario legend{
+    text-align:center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+#formulario label{
+   display:block;
+   margin-left: 1rem;
+}
+
+#formulario input[type="text"] {
+    padding: 6px;
+    margin-bottom: 12px;
+    width: 95%;
+    margin-left: 1rem;
+}
+
+#formulario input[type="text"]:active , #formulario input[type="text"]:focus {
+    outline: none;
+}
+
+.btn-return {
+    position: absolute;
+    right: 10px;
+    top: 15px;
+    padding: .4rem;
+    border-radius: 100%;
+    background-color: #F2F2F2;
+    border: none;
+    box-shadow: 0px 0px 5px gray;
+    cursor: pointer;
+    opacity: .9;
+    transition: opacity .2s;
+}
+
+.btn-return:hover {
+    opacity: 1;
+}
+
+.btn-return svg {
+    width: 20px;
+    height: 20px;
+}

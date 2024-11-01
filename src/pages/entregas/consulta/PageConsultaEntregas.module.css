@@ -1,0 +1,134 @@
+body {
+    overflow-x: hidden;
+}
+
+.banner {
+    background-image: url("https://esales.com.br/wp-content/uploads/2022/08/post_thumbnail-17167e2d117f53637821bc29d31e52ee-2048x1152.jpeg");
+    display: flex;
+    background-size: auto;
+    width: 100%;
+    height: 100vh;
+    justify-content: center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.section {
+    margin-top: 1rem;
+    width: 90%;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+}
+
+#pesquisa {
+    padding: 1rem 2rem;
+    background-color: black;
+    opacity: 0.75;
+    color: white;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: flex-start;
+    box-sizing: border-box;
+}
+
+.input-label {
+    display: flex;
+    flex-direction: column;
+}
+
+#pesquisa input:not(input[type=submit]) , select {
+    width: 150px;
+    padding: .2rem;
+}
+
+#pesquisa input:not(input[type=submit]):focus {
+    outline: none;
+}
+
+#pesquisa label{
+    margin-bottom: 5px;
+}
+
+#pesquisa input[type=submit] {
+    border: none;
+    padding: .7rem 2.5rem;
+    align-self: flex-end;
+    background-color: #2c2f3a;
+    color: white;
+    border-radius: 5px;
+    border: 1px solid white;
+    cursor: pointer;
+    transition: all .4s;
+}
+
+#pesquisa input[type=submit]:hover {
+    color: #2c2f3a;
+    background-color: #F2F2F2;
+    border: 1px solid #2c2f3a;
+}
+
+.tabela {
+    width: 100%;
+    padding-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+/* Estilos para a tabela */
+.table {
+    width: 100%;
+    box-sizing: border-box;
+    border-collapse: collapse;
+    opacity: 0.75;
+    background-color: #343a40; /* cor de fundo escura */
+    color: #fff; /* texto branco */
+  }
+  
+/* Bordas da tabela */
+.table, th, td {
+  border: 1px solid #454d55;
+}
+
+/* Hover nas linhas da tabela */
+.table tbody tr:hover {
+  background-color: #495057;
+}
+
+/* Cabeçalho da tabela */
+th {
+  padding: 12px;
+  background-color: #212529;
+  color: #fff;
+  text-align: left;
+}
+  
+/* Células da tabela */
+td {
+  padding: 7px;
+  font-weight: bold;
+  font-size: 12px;
+}
+  
+td svg {
+    color: #FFF;
+}
+
+.form-control{
+    display: flex;
+    flex-direction: column;
+}
+
+.form-control label{
+    margin-bottom: .3rem;
+}
+
+.form-control .input-form-control {
+    border: none;
+    border: 1px solid #7a7d8a;
+    border-radius: 5px;
+    background-color: #2c2f3a;
+    color: white;
+    padding: .5rem .8rem  !important;
+}

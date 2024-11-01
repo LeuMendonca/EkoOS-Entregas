@@ -1,0 +1,64 @@
+.banner {
+    background-image: url("https://esales.com.br/wp-content/uploads/2022/08/post_thumbnail-17167e2d117f53637821bc29d31e52ee-2048x1152.jpeg");
+    display: flex;
+    background-size: auto;
+    height: calc(100vh - 4.6rem);
+    width: 100%;
+    justify-content: center;
+    background-size: cover;
+}
+
+
+.tabela {
+    width: 90%;
+    margin-top: 1rem;
+}
+
+/* Estilos para a tabela */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    opacity: 0.75;
+    background-color: #343a40; /* cor de fundo escura */
+    color: #fff; /* texto branco */
+  }
+
+.table tbody td:first-of-type {
+   width: 20px;
+}
+
+.table tbody td:last-of-type {
+    width: 20%;
+}
+  
+/* Bordas da tabela */
+.table, th, td {
+  border: 1px solid #454d55;
+}
+
+/* Hover nas linhas da tabela */
+.table tbody tr:hover {
+  background-color: #495057;
+}
+
+/* Cabeçalho da tabela */
+th {
+  padding: 12px;
+  background-color: #212529;
+  color: #fff;
+  text-align: left;
+}
+  
+/* Células da tabela */
+td {
+  padding: 7px;
+  font-weight: bold;
+}
+  
+td svg {
+    color: #FFF;
+}
+
+.btn-edit {
+  cursor: pointer;
+}

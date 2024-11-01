@@ -1,0 +1,22 @@
+.header {
+    display: flex;
+    justify-content: end;
+    background-color:  #161a2d;
+    padding: 1rem;
+    border-bottom: 1px solid gray;
+}
+
+.header button {
+    border: none;
+    outline: none;
+    padding: .8rem;
+    background-color: #F2F2F2;
+    border-radius: .5rem;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity .3s;
+}
+
+.header button:hover {
+    opacity: 1;
+}

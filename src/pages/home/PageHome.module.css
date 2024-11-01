@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 200px;
+    display: flex;
+    overflow-x: hidden;
+    flex-direction: column;
+    background: #161a2d;
+    padding: 25px 20px;
+    transition: all 0.4s ease;
+    border-right: 1px solid gray;
+
+    ul{
+       margin-left: 0.5rem; 
+    }
+
+    li {
+        margin-left: 1rem;
+    }
+}
+
+.sidebar .sidebarheader {
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .sidebarheader img {
+    width: 42px;
+    border-radius: 50%;
+}
+
+.sidebar .sidebarheader h2 {
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 600;
+    white-space: nowrap;
+    margin-left: 23px;
+}
+
+.sidebarlinks h4 {
+    color: #fff;
+    font-weight: 500;
+    white-space: nowrap;
+    margin: 10px 0;
+    position: relative;
+}
+
+.sidebarlinks h4 span {
+    opacity: 1;
+}
+
+.sidebar:hover .sidebarlinks h4 span {
+    opacity: 1;
+}
+
+.sidebarlinks {
+    list-style: none;
+    margin-top: 20px;
+    height: 80%;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.sidebarlinks::-webkit-scrollbar {
+    display: none;
+}
+
+.sidebarlinks li a{
+    display: flex;
+    align-items: center;
+    gap: 0 20px;
+    color: #fff;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 15px 10px;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.sidebarlinks li a:hover {
+    color: #161a2d;
+    background: #fff;
+    border-radius: 4px;
+}
+
+.useraccount {
+    margin-top: auto;
+    padding: 12px 10px;
+    margin-left: -10px;
+}
+
+.userprofile {
+    display: flex;
+    align-items: center;
+    color: #161a2d;
+}
+
+.userprofile img {
+    width: 42px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+
+.userprofile h3 {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.userprofile span {
+    font-size: 0.775rem;
+    font-weight: 600;
+}
+
+.userdetail {
+    margin-left: 23px;
+    white-space: nowrap;
+}
+
+.sidebar:hover .useraccount {
+    background: #fff;
+    border-radius: 4px;
+}
+
+.section {
+    width: calc(100vw - 240px);
+    height: calc(100vh - 100px);
+    margin-left: 240px;
+    display: flex;
+
+    span {
+        position: absolute;
+        font-size: 3rem;
+        width: 500px;
+        z-index: 900;
+    }
+}
+
+.menu-span {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.divBanner {
+    transform: translate(100px,50px);
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.bannerEntregas {
+    width: 700px;
+    height: 400px;
+    position: absolute;
+    transform: translate(30%,30%);
+}
+
+.div-outlet {
+    margin-left: 240px;
+}
