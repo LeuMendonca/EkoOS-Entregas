@@ -1,0 +1,33 @@
+.pagination{
+    display: flex;
+    gap: .7rem;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 1rem;
+}
+
+.pagination span {
+    background-color: #161a2d;
+    padding: .8rem .8rem;
+    color: white;
+    opacity: .8;
+    border-radius: 5px;
+    transition: all .3s;
+    cursor: pointer;
+}
+
+.pagination svg {
+    width: 13px;
+    height: 13px;
+    font-size: 2.8rem;
+}
+
+.pagination span:hover{
+    opacity: 1;
+}
+
+.active {
+    background-color: #F2F2F2 !important;
+    color: #161a2d !important;
+    border: #161a2d 1.5px solid;
+}

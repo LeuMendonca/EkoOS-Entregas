@@ -1,0 +1,68 @@
+.row-item-agendado{
+    margin: 0 1rem ;
+    display: grid;
+    grid-template-columns: 8% 30% 8% 17% 15% 8% 8%;
+    padding: 1.6rem 1.3rem ;
+    align-items: center;
+    gap: 20px;
+    word-wrap: break-word;
+    border-radius: 10px;
+    background-color: #2c2f3a;
+}
+
+.input-form{
+    border: 1px solid #AAA;
+    border-radius: 10px;
+    color: #F2F2F2;
+    width: 50px;
+    text-align: center;
+    background-color: transparent;
+    padding: .5rem 1rem;
+}
+
+.input-form-text {
+    width: 80%;
+    text-align: start;
+}
+
+.input-form:focus {
+    outline: none;
+}
+
+.disabled-input {
+    pointer-events: none;
+}
+
+.row-item-agendado a , .row-item a {
+    cursor: pointer;
+}
+
+.right-to-left {
+    animation: slideIn 0.5s ease-out forwards; /* Inicia a animação */
+}
+
+.left-to-right {
+    animation: slideOut 0.5s ease-out forwards; /* Inicia a animação */
+}
+
+@keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 1;
+    }
+}

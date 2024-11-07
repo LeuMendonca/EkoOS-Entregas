@@ -15,7 +15,6 @@ export default function PageCadastroVeiculo({ codigoVeiculo , setAba }: PROPRIED
 
     const schema = z.object({
         dbedNome: z.string().trim().min(1,'Nome do entregador é obrigatório!'),
-        dbedAno: z.string().trim().min(1,'Ano do veículo é obrigatório!'),
         dbedPlaca: z.string().trim().min(1,'Senha é obrigatório!')
     })
 
@@ -70,7 +69,6 @@ export default function PageCadastroVeiculo({ codigoVeiculo , setAba }: PROPRIED
 
         if( response.data.Status == 200 ){
             setValue("dbedNome", response.data.Veiculo[0].nome )
-            setValue("dbedAno", response.data.Veiculo[0].ano )
             setValue("dbedPlaca", response.data.Veiculo[0].placa )
         }
     }
@@ -88,19 +86,18 @@ export default function PageCadastroVeiculo({ codigoVeiculo , setAba }: PROPRIED
                 <button onClick={() => setAba(0)} className={ styles['btn-return'] }>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-undo-2"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>
                 </button>
+                
                 <legend>Cadastrar Veículo</legend>
                 <div>
                     <label>Nome:</label>
                     <input {...register("dbedNome")} className={styles.camponome} type="text"></input>
                 </div>
+
                 <div>
                     <label>Placa:</label>
                     <input {...register("dbedPlaca")} className={styles.campoplaca} type="text"></input>
                 </div>
-                <div>
-                    <label>Ano:</label>
-                    <input {...register("dbedAno")} max={4} className={styles.campoano} type="text"></input>
-                </div>
+                
                 <div className={styles.botoes}>
                     <input className={styles.botaocadastrar} type="submit" value="Cadastrar"></input>
                 </div>

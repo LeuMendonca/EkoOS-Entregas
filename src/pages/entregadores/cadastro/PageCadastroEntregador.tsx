@@ -15,6 +15,8 @@ export default function PageCadastroEntregador({ setAba , codigoEntregador }: PR
 
     const schema = z.object({
         dbedNome: z.string().trim().min(1,'Nome do entregador é obrigatório!'),
+        dbedEmail: z.string().trim(),
+        dbedContato: z.string().trim(),
         dbedUsuario: z.string().trim().min(1,'Usuário é obrigatório!'),
         dbedSenha: z.string().trim().min(1,'Senha é obrigatório!')
     })
@@ -23,6 +25,13 @@ export default function PageCadastroEntregador({ setAba , codigoEntregador }: PR
 
     const { register, handleSubmit , reset , setValue } = useForm<CADASTRO_ENTREGADOR>({
         resolver: zodResolver(schema),
+        defaultValues: {
+            dbedContato: '',
+            dbedEmail: '',
+            dbedNome: '',
+            dbedSenha: '',
+            dbedUsuario: ''
+        }
     })
 
     async function handleSubmitForm( data: CADASTRO_ENTREGADOR ){
@@ -74,6 +83,8 @@ export default function PageCadastroEntregador({ setAba , codigoEntregador }: PR
             setValue("dbedNome", response.data.Entregador[0].nome )
             setValue("dbedUsuario", response.data.Entregador[0].usuario )
             setValue("dbedSenha", response.data.Entregador[0].senha )
+            setValue("dbedEmail", response.data.Entregador[0].email )
+            setValue("dbedContato", response.data.Entregador[0].fone )
         }
     }
 
@@ -100,6 +111,16 @@ export default function PageCadastroEntregador({ setAba , codigoEntregador }: PR
                         </div>
 
                         <div>
+                            <label>Contato:</label>
+                            <input { ...register('dbedContato') } className={styles.campousuario} type="text"></input>
+                        </div>
+
+                        <div>
+                            <label>E-mail:</label>
+                            <input { ...register('dbedEmail') } className={styles.campousuario} type="text"></input>
+                        </div>
+
+                        <div>
                             <label>Usuario:</label>
                             <input { ...register('dbedUsuario') } className={styles.campousuario} type="text"></input>
                         </div>
@@ -110,7 +131,7 @@ export default function PageCadastroEntregador({ setAba , codigoEntregador }: PR
                         </div>
 
                         <div className={styles.botoes}>
-                            <input className={styles.botaocadastrar} type="submit" value="Cadastrar"/>
+                            <input className={styles.botaocadastrar} type="submit" value={ codigoEntregador > 0 ? 'Atualizar' : 'Cadastrar'}/>
                         </div>
                     </form>
                 </div>

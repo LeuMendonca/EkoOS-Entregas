@@ -24,6 +24,14 @@ export default function Layout() {
                     </a>
                 </li>
                 <li>
+                    <a href="/consultar-entregas">
+                        <span className={styles["menu-span"]}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                            Consultar
+                        </span>
+                    </a>
+                </li>
+                <li>
                 </li>
                 <h4>
                     <span className={ styles["menu-span"]}>
@@ -35,7 +43,7 @@ export default function Layout() {
                     <a href="/veiculos">
                         <span className={ styles["menu-span"]}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                            Visualizar
+                            Consultar
                         </span>
                     </a>
                 </li>
@@ -51,7 +59,7 @@ export default function Layout() {
                     <a href="/entregadores">
                         <span className={ styles["menu-span"]}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                            Visualizar
+                            Consultar
                         </span>
                     </a>
                 </li>

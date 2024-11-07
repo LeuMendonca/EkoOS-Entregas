@@ -11,7 +11,7 @@ export default function PageEntregadores() {
     return (
         <>
             <header  className={ styles.header }>
-                <button onClick={() => setAba( 1 )}>Novo Entregador</button>
+                <button onClick={() => {setAba( 1 );setCodigoEntregador(0)}}>Novo Entregador</button>
             </header>
 
             { aba == 0 ? 

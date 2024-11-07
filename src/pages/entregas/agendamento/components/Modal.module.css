@@ -11,25 +11,31 @@
     border-left: 1px solid #CCC;
     overflow-y: scroll;
     overflow-x: hidden;
-    opacity: 0; /* Inicialmente invisível */
+    opacity: 0;
 }
 
-/* Estiliza a barra de rolagem no modal */
+.active {
+    right: 0;
+    visibility: visible;
+    opacity: 1;
+}
+
+
 .modal::-webkit-scrollbar {
-    width: 10px; /* Largura da barra de rolagem */
+    width: 10px;
 }
 
 .modal::-webkit-scrollbar-thumb {
-    background-color: #21232c; /* Cor do 'thumb' (parte que se move) */
-    border-radius: 5px; /* Borda arredondada */
+    background-color: #21232c; 
+    border-radius: 5px;
 }
 
 .modal::-webkit-scrollbar-thumb:hover {
-    background-color: #21232c; /* Cor do 'thumb' ao passar o mouse */
+    background-color: #21232c;
 }
 
 .modal::-webkit-scrollbar-track {
-    background: #2c2f3a; /* Cor da trilha (parte de fundo da barra de rolagem) */
+    background: #2c2f3a;
 }
 
 .btn-close-modal {
@@ -58,12 +64,6 @@
     height: 20px;
 }
 
-.active {
-    right: 0;
-    visibility: visible;
-    opacity: 1; /* Torna visível */
-}
-
 
 .modal h3 {
     font-size: 2rem;
@@ -87,6 +87,16 @@
     gap: 5rem;
     margin-bottom: .8rem;
 }
+.span-tipo-entrega{
+    position: absolute;
+    right: 20px;
+    background: #7a7d8a;
+    padding: .8rem 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px black;
+    font-weight: bold;
+    font-size: .9rem;
+}
 
 .section-itens{
     display: flex;
@@ -102,38 +112,22 @@
     font-size: 1.8rem;
 }
 
-.row-item-agendado{
+.row-header {
     margin: 0 1rem ;
     display: grid;
-    grid-template-columns: 8% 30% 8% 17% 15% 8% 8%;
-    padding: 1.6rem 1.3rem ;
+    grid-template-columns: 8% 8% 35% 10% 15% 8% 5%;
+    padding: 1.0rem 1.3rem ;
     align-items: center;
     gap: 20px;
     word-wrap: break-word;
     border-radius: 10px;
     background-color: #2c2f3a;
-}
-
-.row-item-pendente{
-    margin: 0 1rem ;
-    display: grid;
-    grid-template-columns: 8% 8% 30% 8% 17% 15% 5%;
-    padding: 1.6rem 1.3rem ;
-    align-items: center;
-    gap: 20px;
-    word-wrap: break-word;
-    border-radius: 10px;
-    background-color: #2c2f3a;
-}
-
-.row-item-agendado a , .row-item a {
-    cursor: pointer;
 }
 
 .row-item{
     margin: 0 1rem ;
     display: grid;
-    grid-template-columns: 8% 8% 35% 10% 20% 10%;
+    grid-template-columns: 8% 8% 35% 10% 15% 8% 5%;
     padding: 1.6rem 1.3rem ;
     align-items: center;
     gap: 20px;
@@ -215,13 +209,11 @@
     margin: 2rem;
 }
 
-/* Personalizar o ícone do calendário em navegadores compatíveis */
 input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1); /* Deixa o ícone mais claro, ajustável conforme necessário */
+    filter: invert(1);
     cursor: pointer;
   }
   
-/* Remover o estilo padrão em Firefox */
 input[type="date"]::-moz-focus-inner {
     border: 0;
 }
@@ -272,6 +264,7 @@ input[type=checkbox]:checked:after {
     justify-content: center;
     background-color: #2c2f3a;
     font-size: 1.2rem;
+    border-radius: 5px;
 }
 
 .msg-erro {
@@ -307,13 +300,10 @@ input[type=checkbox]:checked:after {
     to {
         transform: translateX(100%);
         opacity: 1;
-}
-}
-
-.right-to-left {
-    animation: slideIn 0.5s ease-out forwards; /* Inicia a animação */
+    }
 }
 
-.left-to-right {
-    animation: slideOut 0.5s ease-out forwards; /* Inicia a animação */
+#trash-icon {
+    color: rgb(247, 71, 71);
+    cursor: pointer;
 }

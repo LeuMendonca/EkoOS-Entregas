@@ -1,14 +1,35 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
+import { api } from '../../../services/axios'
 import styles from './PageConsultaEntregas.module.css'
-import { api } from '../../../services/axios';
-import Select from 'react-select';
-import Modal from '../components/Modal';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import Select from 'react-select'
+import Pagination from '../../components/Pagination';
+import ModalConsulta from './components/ModalConsulta';
+
+interface OBJETO_SELECT {
+    value: string;
+    label: string;
+}
+
+interface VENDAS {
+    sequencial_entrega: number;
+    sequencial_item: number;
+    pedido: string;
+    cliente: string;
+    endereco: string;
+    produto: string;
+    data_entrega: string;
+    nome_entregador: string;
+    nome_veiculo: string;
+    status: string;
+    obs: string;
+    tipo_entrega: string;
+}
 
 const status = [
+    {value: 'P', label: 'PENDENTE' },
     {value: 'A', label: 'AGENDADO' },
     {value: 'F', label: 'FINALIZADO'},
     {value: 'R', label: 'EM ROTA'},
@@ -49,32 +70,22 @@ const customStyles = {
       ...provided,
       color: '#b0b3c5', // Cor do texto do placeholder
     }),
-  };
-  
-
-interface VENDAS {
-    sequencial: number;
-    venda: number;
-    cliente: string;
-    endereco: string;
-    status: string;
-    data_venda: string;
-}
-
-interface OBJETO_SELECT {
-    value: string;
-    label: string;
-}
+};
 
 export default function PageConsultaEntregas() {
 
+    // Ferramentas para o modal de consulta
+    const [ isActive , setIsActive ] = useState(false)
+    const [ sequencialEntrega, setSequencialEntrega ] = useState(0)
+
     const [ vendas , setVendas ] = useState<VENDAS[]>([])
-    const [isActive, setIsActive] = useState(false);
-    const [ codigoVenda , setCodigoVenda ] = useState(0)
+
+    const [ offset , setOffset ] = useState(0)
+    const [ totalVendas , setTotalVendas ] = useState(0)
 
     const [ optionsEntregadores , setOptionsEntregadores ] = useState<OBJETO_SELECT[]>([])
     const [ optionsVeiculos , setOptionsVeiculos ] = useState<OBJETO_SELECT[]>([])
-
+    
     const schema = z.object({
         dbedVeiculo: z.string().optional(),
         dbedEntregador: z.string().optional(),
@@ -86,7 +97,7 @@ export default function PageConsultaEntregas() {
 
     type BUSCA_FORMULARIO = z.infer<typeof schema>
 
-    const { register, handleSubmit , reset , setValue , control } = useForm<BUSCA_FORMULARIO>({
+    const { register, handleSubmit , reset , control } = useForm<BUSCA_FORMULARIO>({
         resolver: zodResolver(schema),
         defaultValues: {
             dbedDataEntrega: '',
@@ -98,32 +109,50 @@ export default function PageConsultaEntregas() {
         }
     })
 
-    async function submitForm( data: BUSCA_FORMULARIO){
-        const response = await api.get("entregas/",{
+    async function submitFormPesquisa( data: BUSCA_FORMULARIO ){
+        const response = await api.get("entregas/consultar-agendamentos",{
             params: {
                 query_veiculo: data.dbedVeiculo,
                 query_entregador: data.dbedEntregador,
                 query_data_entrega: data.dbedDataEntrega,
                 query_venda: data.dbedVenda,
-                query_status: data.dbedStatus
+                query_status: data.dbedStatus,
+                offset
             }
         })
+
+        if( response.data.Status == 200 ){
+            setVendas( response.data.Vendas )
+            setTotalVendas( response.data.TotalVendas )
+        }
     }
 
-    async function getEntregas(){
-        const response = await api.get("entregas/",{
+    async function getAgendamentos(){
+        const response = await api.get("entregas/consultar-agendamentos",{
             params: {
                 query_veiculo: '',
                 query_entregador: '',
                 query_data_entrega: '',
                 query_venda: '',
                 query_status: '',
+                offset
             }
         })
 
         if( response.data.Status == 200 ){
             setVendas( response.data.Vendas )
+            setTotalVendas( response.data.TotalVendas )
         }
+    }
+
+    async function limparFiltros(){
+        reset();
+        getAgendamentos();
+    }
+
+    async function verVenda( sequencial: number ){
+        setIsActive( true )
+        setSequencialEntrega( sequencial )
     }
 
     async function getEntregadoresOptions(){
@@ -143,149 +172,147 @@ export default function PageConsultaEntregas() {
     }
 
     useEffect(() => {
-        getEntregas();
-        getEntregadoresOptions();
-        getVeiculoOptions();
-    },[ isActive ])
+        getEntregadoresOptions()
+        getVeiculoOptions()
+        getAgendamentos()
+    },[ offset ])
 
     return (
-    <>
-        <div className={styles.banner}>
-            <div className={ styles.section}>
-                <form id={styles.pesquisa} onSubmit={handleSubmit(submitForm)}>
-                    <div className={styles["form-control"]}>
-                        <label>Veiculo:</label>
-                        <Controller
-                            control={control}
-                            name="dbedVeiculo"
-                            render={({field}) => {  
-                                return(
-                                    <Select
-                                        options={optionsVeiculos}
-                                        styles={customStyles}
-                                        menuPortalTarget={document.body}
-                                        placeholder="Selecione..."
-                                        value={ optionsVeiculos.find((c) => c.value === field.value) }                                          
-                                        onChange={(val) => {field.onChange(val?.value)}} 
-                                    />
-                                )
-                            }}                                        
-                        />
-                        
-                    </div>
-                    
-                    <div className={styles["form-control"]}>
-                        <label>Entregador</label>
-                        <Controller
-                            control={control}
-                            name="dbedEntregador"
-                            render={({field}) => {  
-                                return(
-                                    <Select
-                                        options={optionsEntregadores}
-                                        styles={customStyles}
-                                        menuPortalTarget={document.body}
-                                        placeholder="Selecione..."
-                                        value={ optionsEntregadores.find((c) => c.value === field.value) }                                          
-                                        onChange={(val) => {field.onChange(val?.value)}}  
-                                    />
-                                )
-                            }}                                        
-                        />
-                        
-                    </div>
-
-                    <div className={styles["form-control"]}>
-                        <label htmlFor=""><b>Data de Entrega</b></label>
-                        <input {...register("dbedDataEntrega")} type="date" className={ styles['input-form-control']} />
-                    </div>
-
-                    <div className={ styles["form-control"]}>
-                        <label>Venda</label>
-                        
-                        <input {...register("dbedVenda")} type="text" className={ styles['input-form-control'] }/>
-                    </div>
-
-                    <div className={ styles['form-control']}>
-                        <label>Status</label>
-                        <Controller
-                            control={control}
-                            name="dbedStatus"
-                            render={({field}) => {  
-                                return(
-                                    <Select
-                                        options={status}
-                                        styles={customStyles}
-                                        menuPortalTarget={document.body}
-                                        placeholder="Selecione..."
-                                        value={ status.find((c) => c.value === field.value) }                                          
-                                        onChange={(val) => {field.onChange(val?.value)}} 
-                                    />
-                                )
-                            }}                                        
-                        />
-                    </div>
-
-                    <input className={styles.botaopesquisar} type="submit" value="Pesquisar"></input>
-                </form >
-
-                <div className={styles.tabela}>
-                    <table className={ styles.table }>
-
-                        <thead>
-                            <tr>
-                                <th scope="col">N° VENDA</th>
-                                <th scope="col">CLIENTE</th>
-                                <th scope="col">ENDERECO</th>
-                                <th scope="col">TIPO</th>
-                                <th>DATA</th>
-                                <th>STATUS</th>
-                                <th scope="col">AÇÕES</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {
-                                vendas && 
-                                    vendas.map( venda =>  (
-                                        <tr>
-                                            <td scope="row">{ venda.venda }</td>
-                                            <td>{ venda.cliente }</td>
-                                            <td>{ venda.endereco }</td>
-                                            <td>RECOLHIMENTO</td>
-                                            <td>{ venda.data_venda}</td>
-                                            <td>{ venda.status == 'A' ? 'ABERTO' 
-                                                : venda.status == 'F' ? 'FINALIZADO'
-                                                : venda.status == 'R' ? 'EM ROTA'
-                                                : venda.status == 'C' ? 'CANCELADO'
-                                                : venda.status == 'AD' ? 'ADIADO'
-                                                : venda.status == 'AG' ? 'AGENDADO'
-                                                : ''
-                                            }</td>
-                                            <td>
-                                                <a onClick={() => { setIsActive( state => !state ); setCodigoVenda( venda.sequencial) }}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-square-pen"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg>
-                                                </a> 
-                                            </td>
-                                        </tr>
-                                    ))
-                            }
+        <>
+            <div className={ styles["banner"]}>
+                <div className={ styles.section}>
+                    <form id={styles.pesquisa} onSubmit={handleSubmit(submitFormPesquisa)}>
+                        <div className={styles["form-control"]}>
+                            <label>Veiculo:</label>
+                            <Controller
+                                control={control}
+                                name="dbedVeiculo"
+                                render={({field}) => {  
+                                    return(
+                                        <Select
+                                            options={optionsVeiculos}
+                                            styles={customStyles}
+                                            menuPortalTarget={document.body}
+                                            placeholder="Selecione..."
+                                            value={ optionsVeiculos.find((c) => c.value === field.value) }                                          
+                                            onChange={(val) => {field.onChange(val?.value)}} 
+                                        />
+                                    )
+                                }}                                        
+                            />
                             
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                        </div>
+                        
+                        <div className={styles["form-control"]}>
+                            <label>Entregador</label>
+                            <Controller
+                                control={control}
+                                name="dbedEntregador"
+                                render={({field}) => {  
+                                    return(
+                                        <Select
+                                            options={optionsEntregadores}
+                                            styles={customStyles}
+                                            menuPortalTarget={document.body}
+                                            placeholder="Selecione..."
+                                            value={ optionsEntregadores.find((c) => c.value === field.value) }                                          
+                                            onChange={(val) => {field.onChange(val?.value)}}  
+                                        />
+                                    )
+                                }}                                        
+                            />
+                            
+                        </div>
 
-            <Modal
-                setIsActive={ setIsActive }
-                isActive={ isActive }
-                codigoVenda={ codigoVenda }
-                optionsEntregadores={optionsEntregadores}
-                optionsVeiculos={optionsVeiculos}
+                        <div className={styles["form-control"]}>
+                            <label htmlFor=""><b>Data de Entrega</b></label>
+                            <input {...register("dbedDataEntrega")} type="date" className={ styles['input-form-control']} />
+                        </div>
+
+                        <div className={ styles["form-control"]}>
+                            <label>Venda</label>
+                            
+                            <input {...register("dbedVenda")} type="text" className={ styles['input-form-control'] }/>
+                        </div>
+
+                        <div className={ styles['form-control']}>
+                            <label>Status</label>
+                            <Controller
+                                control={control}
+                                name="dbedStatus"
+                                render={({field}) => {  
+                                    return(
+                                        <Select
+                                            options={status}
+                                            styles={customStyles}
+                                            menuPortalTarget={document.body}
+                                            placeholder="Selecione..."
+                                            value={ status.find((c) => c.value === field.value) }                                          
+                                            onChange={(val) => {field.onChange(val?.value)}} 
+                                        />
+                                    )
+                                }}                                        
+                            />
+                        </div>
+
+                        <input className={styles.botaopesquisar} type="submit" value="Pesquisar"></input>
+                        <input onClick={() => limparFiltros()} className={styles.botaopesquisar} type="button" value="Limpar"></input>
+                    </form >
+
+                    <div className={styles.tabela}>
+                        <table className={ styles.table }>
+
+                            <thead>
+                                <tr>
+                                    <th scope="col">Pedido</th>
+                                    <th scope="col">CLIENTE</th>
+                                    <th scope="col">STATUS</th>
+                                    <th scope='col'>TIPO ENTREGA</th>
+                                    <th scope='col'>PRODUTO</th>
+                                    <th scope='col'>ENTREGADOR</th>
+                                    <th scope='col'>DATA ENTREGA</th>
+                                    <th scope="col">AÇÕES</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {
+                                    vendas && 
+                                        vendas.map( venda =>  (
+                                            <tr>
+                                                <td scope="row">{ venda.pedido }</td>
+                                                <td scope="row">{ venda.cliente }</td>
+                                                <td scope="row">{ venda.status }</td>
+                                                <td scope="row">{ venda.tipo_entrega }</td>
+                                                <td scope="row">{ venda.produto }</td>
+                                                <td scope="row">{ venda.nome_entregador }<br/>{ venda.nome_veiculo }</td>
+                                                <td scope="row">{ venda.data_entrega ? venda.data_entrega : 'N/A'}</td>
+                                                <td scope="row">
+                                                    <a onClick={() => verVenda( venda.sequencial_entrega )}>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
+                                                    </a> 
+                                                </td>
+                                            </tr>
+                                        ))
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <ModalConsulta
+                    isActive={ isActive }
+                    setIsActive={ setIsActive }
+                    sequencialEntrega={ sequencialEntrega }
+                />
+            </div>
+            
+            <Pagination
+                total_registros={ totalVendas }
+                setOffset={setOffset}
             />
 
-        </div>
-
-    </>
-  )
+            
+        </>
+    )
 }

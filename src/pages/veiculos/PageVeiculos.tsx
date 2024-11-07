@@ -11,7 +11,7 @@ export default function PageVeiculos() {
     return (
         <>
             <header  className={ styles.header }>
-                <button onClick={() => setAba( 1 )}>Novo Veículo</button>
+                <button onClick={() => {setAba( 1 );setCodigoVeiculo(0)}}>Novo Veículo</button>
             </header>
 
             { aba == 0 ? 
