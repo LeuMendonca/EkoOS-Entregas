@@ -115,7 +115,7 @@
 .row-header {
     margin: 0 1rem ;
     display: grid;
-    grid-template-columns: 8% 8% 35% 10% 15% 8% 5%;
+    grid-template-columns: 8% 10% 28% 10% 21% 8% 5%;
     padding: 1.0rem 1.3rem ;
     align-items: center;
     gap: 20px;
@@ -124,10 +124,55 @@
     background-color: #2c2f3a;
 }
 
+.header-itens { 
+    display: flex;
+    justify-content: space-between;
+    margin-right: 1rem;
+    align-items: center;
+    position: relative;
+}
+
+.header-itens button {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.accordion-itens {
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease-out;
+    max-height: 0;  
+    overflow: hidden;
+    gap: 10px;
+}
+
+.numberIndicador {
+    color: rgb(230, 80, 80);
+    font-size: 18px;
+    animation: indicador-numero ease .9s;
+    position: absolute;
+    margin-left: .2rem;
+    top: 0;
+    visibility: hidden;
+}
+
+@keyframes indicador-numero {
+    from {
+        top: -20px;
+        visibility: visible;
+    } to {
+        top: 0;
+        visibility: hidden;
+    }
+}
+
+
 .row-item{
     margin: 0 1rem ;
     display: grid;
-    grid-template-columns: 8% 8% 35% 10% 15% 8% 5%;
+    grid-template-columns: 8% 10% 28% 10% 21% 8% 5%;
     padding: 1.6rem 1.3rem ;
     align-items: center;
     gap: 20px;
@@ -307,3 +352,4 @@ input[type=checkbox]:checked:after {
     color: rgb(247, 71, 71);
     cursor: pointer;
 }
+

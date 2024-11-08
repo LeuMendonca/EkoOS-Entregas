@@ -1,19 +1,20 @@
 .row-header-item{
     margin: 1rem 1rem ;
     display: grid;
-    grid-template-columns: 8% 30% 8% 17% 15% 8% 8%;
+    grid-template-columns: 10% 28% 8% 15% 15% 5% 10%;
     padding: 1rem 1.3rem ;
     align-items: center;
     gap: 20px;
     word-wrap: break-word;
     border-radius: 10px;
     background-color: #2c2f3a;
+    text-wrap: nowrap;
 }
 
 .row-item-agendado{
     margin: 0 1rem ;
     display: grid;
-    grid-template-columns: 8% 30% 8% 15% 15% 5% 10%;
+    grid-template-columns: 10% 28% 8% 15% 15% 5% 10%;
     padding: 1.6rem 1.3rem ;
     text-align: center;
     align-items: center;

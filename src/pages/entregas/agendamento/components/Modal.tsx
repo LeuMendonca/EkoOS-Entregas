@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './Modal.module.css'
 import Select from 'react-select';
 import { z } from 'zod';
@@ -90,6 +90,12 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
     const [ venda , setVenda ] = useState<VENDA_MODAL>({} as VENDA_MODAL)
     const [ atualiza , setAtualiza ] = useState(false)
 
+    const accordionRef = useRef<HTMLDivElement>(null); // Especifica o tipo como HTMLDivElement
+
+    const [ showAccordion , setShowAccordion ] = useState( false )
+
+    const [ showNumeroIndicador , setShowNumeroIndicador ] = useState( false )
+    const [ numeroIndicador , setNumeroIndicador] = useState( 0 )
     async function getVendaModal(){
         
         const response = await api.get("entregas/modal",{
@@ -162,6 +168,13 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
             toast.success( response.data.Mensagem )
             setAtualiza( state => !state )
             reset();
+            setShowNumeroIndicador( true )
+            setNumeroIndicador( response.data.TotalInserido )
+            
+            setTimeout(() => {
+                setShowNumeroIndicador( false )
+            },1000)
+
         }else{
             toast.error( response.data.Erro.causa )
         }
@@ -198,7 +211,7 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
                 <button type='button' onClick={() => { setIsActive( false );reset() }} className={ styles['btn-close-modal']}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-move-left"><path d="M6 8L2 12L6 16"/><path d="M2 12H22"/></svg>
                 </button>
-                <h3>Agendamento da Entrega {sequencialEntrega} </h3>
+                <h3>Agendamento da Entrega { venda.pedido } </h3> 
 
                 <header>
                     <div className={ styles["row-1"]}>
@@ -288,24 +301,33 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
                 </section>
 
                 <section  className={ styles["section-itens"]}>
-                    <h2>Agendamentos Realizados</h2>
+                    <div className={ styles["header-itens"]}>
+                        <h2>Agendamentos Realizados { showNumeroIndicador && <span className={  styles.numberIndicador }>+{ numeroIndicador }</span> }</h2>
 
-                    { venda.itens_agendados ? (
-                        venda.itens_agendados.map( ( item , index ) => (
-                            <ProdutoAgendado
-                                itens_agendados={item}
-                                optionsEntregadores={ optionsEntregadores}
-                                optionsVeiculos={optionsVeiculos}
-                                setAtualiza={ setAtualiza }
-                                index={ index }
-                            />
-                            
-                        )))
-                    : 
-                        <div className={ styles['div-null-itens'] }>
-                            Nenhum agendamento realizado!
-                        </div>
-                    }
+                        <button type='button' onClick={() => setShowAccordion( state => !state)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
+                        </button>
+                    </div>
+                    <div ref={accordionRef} className={styles["accordion-itens"]} style={{
+                        maxHeight: showAccordion ? accordionRef.current?.scrollHeight || 0 : 0
+                    }}>
+                        { venda.itens_agendados ? (
+                            venda.itens_agendados.map( ( item , index ) => (
+                                <ProdutoAgendado
+                                    itens_agendados={item}
+                                    optionsEntregadores={ optionsEntregadores}
+                                    optionsVeiculos={optionsVeiculos}
+                                    setAtualiza={ setAtualiza }
+                                    index={ index }
+                                />
+                                
+                            )))
+                        : 
+                            <div className={ styles['div-null-itens'] }>
+                                Nenhum agendamento realizado!
+                            </div>
+                        }
+                    </div>
                 </section>
 
                 <section className={ styles["section-entrega"]}>

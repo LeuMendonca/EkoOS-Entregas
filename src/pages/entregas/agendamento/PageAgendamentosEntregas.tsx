@@ -10,13 +10,9 @@ import Modal from './components/Modal';
 import DropdownButton from '../../components/DropdownButton';
 
 const status = [
-    { value: '' , label: 'Selecione...' },
-    { value: 'P' , label: 'PENDENTE' },
-    { value: 'A', label: 'AGENDADO' },
-    { value: 'F', label: 'FINALIZADO' },
-    { value: 'R', label: 'EM ROTA' },
-    { value: 'C', label: 'CANCELADO' },
-    { value: 'AD', label: 'ADIADO' },
+    { value: '' , label: 'TODOS'},
+    { value: 'EM ABERTO' , label: 'EM ABERTO'},
+    { value: 'FINALIZADO' , label: 'FINALIZADO'}
 ]
 
 const tipo_entrega = [
@@ -79,8 +75,9 @@ interface OBJETO_SELECT {
 export default function PageAgendamentosEntregas() {
 
     const [ vendas , setVendas ] = useState<VENDAS[]>([])
-    const [isActive, setIsActive] = useState(false);
+    const [ isActive, setIsActive ] = useState(false);
     const [ sequencialEntrega , setSequencialEntrega ] = useState(0)
+    const [ atualiza , setAtualiza ] = useState( false )
 
     const [ offset , setOffset ] = useState(0)
     const [ totalVendas , setTotalVendas ] = useState(0)
@@ -101,7 +98,7 @@ export default function PageAgendamentosEntregas() {
         resolver: zodResolver(schema),
         defaultValues: {
             dbedPedido: '',
-            dbedStatus: 'P',
+            dbedStatus: '',
             dbedTipoEntrega: '',
             dbedCliente: ''
         }
@@ -163,135 +160,139 @@ export default function PageAgendamentosEntregas() {
     }
 
     useEffect(() => {
+
         getEntregas();
         getEntregadoresOptions();
         getVeiculoOptions();
-    },[ isActive , offset ])
+
+    },[ isActive , offset , atualiza ])
 
     return (
-    <>
-        <div className={styles.banner}>
-            <div className={ styles.section}>
-                <form id={styles.pesquisa} onSubmit={handleSubmit(submitForm)}>
-                    <div className={ styles["row-input"]}>
-                        <div className={ styles["form-control"]}>
-                            <label>Número do Pedido</label>
+        <>
+            <div className={styles.banner}>
+                <div className={ styles.section}>
+                    <form id={styles.pesquisa} onSubmit={handleSubmit(submitForm)}>
+                        <div className={ styles["row-input"]}>
+                            <div className={ styles["form-control"]}>
+                                <label>Número do Pedido</label>
+                                
+                                <input {...register("dbedPedido")} type="text" className={ styles['input-form-control'] }/>
+                            </div>
+
+                            <div className={ styles['form-control']}>
+                                <label>Status</label>
+                                <Controller
+                                    control={control}
+                                    name="dbedStatus"
+                                    render={({field}) => {  
+                                        return(
+                                            <Select
+                                                options={status}
+                                                styles={customStyles}
+                                                menuPortalTarget={document.body}
+                                                placeholder="Selecione..."
+                                                value={ status.find((c) => c.value === field.value) }                                          
+                                                onChange={(val) => {field.onChange(val?.value)}} 
+                                            />
+                                        )
+                                    }}                                        
+                                />
+                            </div>
+
+                            <div className={ styles['form-control']}>
+                                <label>Tipo da Entrega</label>
+                                <Controller
+                                    control={control}
+                                    name="dbedTipoEntrega"
+                                    render={({field}) => {  
+                                        return(
+                                            <Select
+                                                options={tipo_entrega}
+                                                styles={customStyles}
+                                                menuPortalTarget={document.body}
+                                                placeholder="Selecione..."
+                                                value={ tipo_entrega.find((c) => c.value === field.value) }                                          
+                                                onChange={(val) => {field.onChange(val?.value)}} 
+                                            />
+                                        )
+                                    }}                                        
+                                />
+                            </div>
+
+                            <div className={ styles["form-control"]}>
+                                <label>Cliente</label>
+                                
+                                <input {...register("dbedCliente")} type="text" className={` ${styles['input-form-control']} ${ styles['input-cliente']}`}/>
+                            </div>
+                        </div>
+
+                        <div className={ styles["row-btn"]}>
+                            <input className={styles.botaopesquisar} type="submit" value="Pesquisar"/>
                             
-                            <input {...register("dbedPedido")} type="text" className={ styles['input-form-control'] }/>
+                            <input onClick={() => limparFiltros()} className={styles.botaopesquisar} type="button" value="Limpar"/>
                         </div>
+                    </form >
 
-                        <div className={ styles['form-control']}>
-                            <label>Status</label>
-                            <Controller
-                                control={control}
-                                name="dbedStatus"
-                                render={({field}) => {  
-                                    return(
-                                        <Select
-                                            options={status}
-                                            styles={customStyles}
-                                            menuPortalTarget={document.body}
-                                            placeholder="Selecione..."
-                                            value={ status.find((c) => c.value === field.value) }                                          
-                                            onChange={(val) => {field.onChange(val?.value)}} 
-                                        />
-                                    )
-                                }}                                        
-                            />
-                        </div>
+                    <div className={styles.tabela}>
+                        <table className={ styles.table }>
 
-                        <div className={ styles['form-control']}>
-                            <label>Tipo da Entrega</label>
-                            <Controller
-                                control={control}
-                                name="dbedTipoEntrega"
-                                render={({field}) => {  
-                                    return(
-                                        <Select
-                                            options={tipo_entrega}
-                                            styles={customStyles}
-                                            menuPortalTarget={document.body}
-                                            placeholder="Selecione..."
-                                            value={ tipo_entrega.find((c) => c.value === field.value) }                                          
-                                            onChange={(val) => {field.onChange(val?.value)}} 
-                                        />
-                                    )
-                                }}                                        
-                            />
-                        </div>
+                            <thead>
+                                <tr>
+                                    <th scope="col">N° VENDA</th>
+                                    <th scope="col">CLIENTE</th>
+                                    <th scope="col">ENDERECO</th>
+                                    <th scope="col">TIPO</th>
+                                    <th>DATA</th>
+                                    <th>STATUS</th>
+                                    <th scope="col">AÇÕES</th>
+                                </tr>
+                            </thead>
 
-                        <div className={ styles["form-control"]}>
-                            <label>Cliente</label>
-                            
-                            <input {...register("dbedCliente")} type="text" className={` ${styles['input-form-control']} ${ styles['input-cliente']}`}/>
-                        </div>
+                            <tbody>
+                                {
+                                    vendas && 
+                                        vendas.map( venda =>  (
+                                            <tr>
+                                                <td scope="row">{ venda.pedido }</td>
+                                                <td>{ venda.cliente }</td>
+                                                <td>{ venda.endereco }</td>
+                                                <td>{ venda.tipo_entrega }</td>
+                                                <td>{ venda.data_venda}</td>
+                                                <td>{ venda.status }</td>
+                                                <td>
+                                                    <DropdownButton
+                                                        setIsActive={ setIsActive }
+                                                        setSequencialEntrega={ setSequencialEntrega }
+                                                        sequencialEntrega={ venda.sequencial}
+                                                        tipoEntrega={ venda.tipo_entrega }
+                                                        status={ venda.status }
+                                                        setAtualiza={ setAtualiza }
+                                                    />
+                                                </td>
+                                            </tr>
+                                        ))
+                                }
+                                
+                            </tbody>
+                        </table>
                     </div>
-
-                    <div className={ styles["row-btn"]}>
-                        <input className={styles.botaopesquisar} type="submit" value="Pesquisar"/>
-                        
-                        <input onClick={() => limparFiltros()} className={styles.botaopesquisar} type="button" value="Limpar"/>
-                    </div>
-                </form >
-
-                <div className={styles.tabela}>
-                    <table className={ styles.table }>
-
-                        <thead>
-                            <tr>
-                                <th scope="col">N° VENDA</th>
-                                <th scope="col">CLIENTE</th>
-                                <th scope="col">ENDERECO</th>
-                                <th scope="col">TIPO</th>
-                                <th>DATA</th>
-                                <th>STATUS</th>
-                                <th scope="col">AÇÕES</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {
-                                vendas && 
-                                    vendas.map( venda =>  (
-                                        <tr>
-                                            <td scope="row">{ venda.pedido }</td>
-                                            <td>{ venda.cliente }</td>
-                                            <td>{ venda.endereco }</td>
-                                            <td>{ venda.tipo_entrega }</td>
-                                            <td>{ venda.data_venda}</td>
-                                            <td>{ venda.status }</td>
-                                            <td>
-                                                <DropdownButton
-                                                    setIsActive={ setIsActive }
-                                                    setSequencialEntrega={ setSequencialEntrega }
-                                                    sequencialEntrega={ venda.sequencial}
-                                                    tipoEntrega={ venda.tipo_entrega }
-                                                    status={ venda.status }
-                                                />
-                                            </td>
-                                        </tr>
-                                    ))
-                            }
-                            
-                        </tbody>
-                    </table>
+                    <Pagination
+                    total_registros = { totalVendas }
+                    setOffset={setOffset}
+                />
                 </div>
+
+                <Modal
+                    setIsActive={ setIsActive }
+                    isActive={ isActive }
+                    sequencialEntrega={ sequencialEntrega }
+                    optionsEntregadores={optionsEntregadores}
+                    optionsVeiculos={optionsVeiculos}
+                />
+
+                
+
             </div>
-
-            <Modal
-                setIsActive={ setIsActive }
-                isActive={ isActive }
-                sequencialEntrega={ sequencialEntrega }
-                optionsEntregadores={optionsEntregadores}
-                optionsVeiculos={optionsVeiculos}
-            />
-
-        </div>
-        
-        <Pagination
-            total_registros = { totalVendas }
-            setOffset={setOffset}
-        />
-    </>
-  )
+        </>
+    )
 }

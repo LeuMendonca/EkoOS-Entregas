@@ -1,18 +1,16 @@
-body {
+.banner {
+    display: flex;
+    justify-content: center;
     background-image: url("https://esales.com.br/wp-content/uploads/2022/08/post_thumbnail-17167e2d117f53637821bc29d31e52ee-2048x1152.jpeg");
     background-attachment: fixed;
     background-size: cover;
     overflow-x: hidden;
-}
-
-.banner {
-    display: flex;
-    justify-content: center;
+    height: 100vh;
 }
 
 .section {
     margin-top: 1rem;
-    width: 90%;
+    width: 98%;
     flex-direction: column;
     display: flex;
     align-items: center;

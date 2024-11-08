@@ -37,6 +37,8 @@ const status = [
     {value: 'AD', label: 'ADIADO'},
 ]
 
+
+
 const customStyles = {
     control: (provided: any) => ({
       ...provided,
@@ -298,21 +300,20 @@ export default function PageConsultaEntregas() {
                             </tbody>
                         </table>
                     </div>
+
+                    <Pagination
+                    total_registros={ totalVendas }
+                    setOffset={setOffset}
+                />
                 </div>
 
-                <ModalConsulta
-                    isActive={ isActive }
-                    setIsActive={ setIsActive }
-                    sequencialEntrega={ sequencialEntrega }
+                
+            <ModalConsulta
+                isActive={ isActive }
+                setIsActive={ setIsActive }
+                sequencialEntrega={ sequencialEntrega }
                 />
-            </div>
-            
-            <Pagination
-                total_registros={ totalVendas }
-                setOffset={setOffset}
-            />
-
-            
+                </div>
         </>
     )
 }

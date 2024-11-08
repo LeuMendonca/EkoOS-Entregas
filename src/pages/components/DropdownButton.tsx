@@ -9,9 +9,11 @@ interface PROPRIEDADES {
     sequencialEntrega: number;
     tipoEntrega: string;
     status: string;
+    setAtualiza: ( atualiza: any ) => void;
+
 }
 
-const DropdownButton: React.FC<PROPRIEDADES> = ({ sequencialEntrega, setSequencialEntrega, setIsActive , tipoEntrega , status }) => {
+const DropdownButton: React.FC<PROPRIEDADES> = ({ sequencialEntrega, setSequencialEntrega, setIsActive , tipoEntrega , status , setAtualiza }) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -76,6 +78,21 @@ const DropdownButton: React.FC<PROPRIEDADES> = ({ sequencialEntrega, setSequenci
         }
     }
 
+    async function deleteEntrega(){
+        const response = await api.delete("entregas/",{
+            params: {
+                sequencial_entrega: sequencialEntrega
+            }
+        })
+
+        if( response.data.Status == 200 ){
+            toast.success( response.data.Mensagem )
+            setAtualiza( ( state: boolean ) => !state )
+        }else{
+            toast.error( response.data.Erro.causa )
+        }
+    }
+
     return (
         <div ref={dropdownRef} className={ styles.dropdown}>
             <button onClick={toggleDropdown} className={ styles['dropdown-button']}>
@@ -88,6 +105,9 @@ const DropdownButton: React.FC<PROPRIEDADES> = ({ sequencialEntrega, setSequenci
                     <a onClick={ () => { geraTroca() } }>Gerar Troca</a>
                     <a onClick={ () => geraRecolhimento() }>Gerar Recolhimento</a></>
                 )
+                }
+                { status != 'FINALIZADO' && tipoEntrega != "ENTREGA" &&
+                    <a onClick={ () => deleteEntrega() }>Excluir</a>
                 }
             </div>
         </div>
