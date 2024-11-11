@@ -1,12 +1,12 @@
 .banner {
-    background-image: url("https://esales.com.br/wp-content/uploads/2022/08/post_thumbnail-17167e2d117f53637821bc29d31e52ee-2048x1152.jpeg");
-    height: 20rem;
-    display: flex;
-    background-size: auto;
-    height: calc(100vh - 4.6rem);
-    width: 100%;
-    justify-content: center;
-    background-size: cover;
+  background-image: url("/src/img/banner-ekoos-entregas.jpg");
+  height: 20rem;
+  display: flex;
+  background-size: auto;
+  height: calc(100vh - 4.6rem);
+  width: 100%;
+  justify-content: center;
+  background-size: cover;
 }
 
 .tabela {
@@ -37,8 +37,9 @@
   width: 20px;
 }
 
-.table tbody td:last-of-type {
+.table tbody td:last-of-type , .table thead th:last-of-type {
     width: 20%;
+    text-align: center;
 }
 
 /* Cabeçalho da tabela */

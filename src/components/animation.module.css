@@ -1,0 +1,32 @@
+.introX {
+    transition: opacity .9s;
+    animation: intro .9s normal;
+}
+
+@keyframes intro {
+    from {
+        transform: translateX(25%);
+        opacity: 0;
+    }
+    to{
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.introY {
+    transition: opacity .9s;
+    animation: introy .9s normal;
+}
+
+@keyframes introy {
+    from {
+        transform: translateY(25%);
+        opacity: 0;
+        overflow: hidden;
+    }
+    to{
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

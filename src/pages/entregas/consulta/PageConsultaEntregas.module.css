@@ -2,7 +2,7 @@
     height: 100vh;
     display: flex;
     justify-content: center;
-    background-image: url("https://esales.com.br/wp-content/uploads/2022/08/post_thumbnail-17167e2d117f53637821bc29d31e52ee-2048x1152.jpeg");
+    /* background-image: url("/src/img/banner-ekoos-entregas.jpg"); */
     background-attachment: fixed;
     background-size: cover;
     overflow-x: hidden;
@@ -32,11 +32,6 @@
 .input-label {
     display: flex;
     flex-direction: column;
-}
-
-#pesquisa input:not(input[type=submit],input[type=button]) , select {
-    width: 150px;
-    padding: .2rem;
 }
 
 #pesquisa input:not(input[type=submit]):focus {
@@ -134,4 +129,11 @@ td:last-of-type {
   
 td svg {
     color: #FFF;
+}
+
+.row-btn {
+    display: flex;
+    gap: 1rem;
+    justify-content: end;
+    width: 100%;
 }

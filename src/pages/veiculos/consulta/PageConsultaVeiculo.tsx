@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './PageConsultaVeiculo.module.css'
+import animation from '../../../components/animation.module.css'
 import { api } from '../../../services/axios';
 
 interface PROPRIEDADES {
@@ -27,18 +28,16 @@ export default function PageConsultaVeiculo({ setAba , setCodigoVeiculo }: PROPR
         getVeiculos();
     },[])
     
-    console.log( setAba , setCodigoVeiculo )
-    
     return (
     <div className={styles.banner}>
         <div className={styles.tabela}>
-            <table className={styles.table}>
+            <table className={`${ styles.table } ${ animation.introY }`}>
                 <thead>
                     <tr>
                         <th scope="col">CODIGO</th>
                         <th scope="col">NOME</th>
                         <th scope="col">PLACA</th>
-                        <th scope="col">Alterar</th>
+                        <th scope="col">AÇÕES</th>
                     </tr>
                 </thead>
                 <tbody>

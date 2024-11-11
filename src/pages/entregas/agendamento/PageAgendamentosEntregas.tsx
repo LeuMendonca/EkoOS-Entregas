@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import styles from './PageAgendamentosEntregas.module.css'
+import animation from '../../../components/animation.module.css'
 import { api } from '../../../services/axios';
 import Select from 'react-select';
 import { z } from 'zod';
@@ -8,6 +9,8 @@ import { Controller, useForm } from 'react-hook-form';
 import Pagination from '../../components/Pagination';
 import Modal from './components/Modal';
 import DropdownButton from '../../components/DropdownButton';
+import { usuarioAutenticado } from '../../../context/useAutenticacao';
+import { getUserLocalStorage } from '../../../context/AutenticacaoContext';
 
 const status = [
     { value: '' , label: 'TODOS'},
@@ -57,6 +60,13 @@ const customStyles = {
     }),
   };
 
+interface SESSAO{
+    seq_tenant: string;
+    login: string;
+    type_user: string;
+    nome_empresa: string;
+}
+
 interface VENDAS {
     sequencial: number;
     pedido: number;
@@ -73,6 +83,36 @@ interface OBJETO_SELECT {
 }
 
 export default function PageAgendamentosEntregas() {
+
+    const AutenticacaoContext = usuarioAutenticado();
+
+    const inicializaSessao = {
+        seq_tenant: '',
+        login: '',
+        type_user: '',
+        nome_empresa: '',
+    }
+
+    const[sessao, setSessao] = useState<SESSAO>(inicializaSessao)
+
+    useEffect(() => {
+        
+        const sessao = getUserLocalStorage();
+
+        if (sessao) {
+
+            const dadosSessao = {   
+                seq_tenant: sessao.seq_tenant,
+                login: sessao.login,
+                type_user: sessao.type_user, 
+                nome_empresa: sessao.nome_empresa, 
+            }
+
+            setSessao(dadosSessao)
+
+        } 
+
+    }, [])
 
     const [ vendas , setVendas ] = useState<VENDAS[]>([])
     const [ isActive, setIsActive ] = useState(false);
@@ -169,9 +209,10 @@ export default function PageAgendamentosEntregas() {
 
     return (
         <>
+            { +sessao.seq_tenant > 0 ? 
             <div className={styles.banner}>
                 <div className={ styles.section}>
-                    <form id={styles.pesquisa} onSubmit={handleSubmit(submitForm)}>
+                    <form id={styles.pesquisa} className={ animation.introX } onSubmit={handleSubmit(submitForm)}>
                         <div className={ styles["row-input"]}>
                             <div className={ styles["form-control"]}>
                                 <label>Número do Pedido</label>
@@ -227,18 +268,18 @@ export default function PageAgendamentosEntregas() {
                         </div>
 
                         <div className={ styles["row-btn"]}>
+                            <input onClick={() => limparFiltros()} className={styles.botaopesquisar} type="button" value="Limpar"/>
                             <input className={styles.botaopesquisar} type="submit" value="Pesquisar"/>
                             
-                            <input onClick={() => limparFiltros()} className={styles.botaopesquisar} type="button" value="Limpar"/>
                         </div>
                     </form >
 
                     <div className={styles.tabela}>
-                        <table className={ styles.table }>
+                        <table className={ `${ styles.table } ${ animation.introY }` }>
 
                             <thead>
                                 <tr>
-                                    <th scope="col">N° VENDA</th>
+                                    <th scope="col">PEDIDO</th>
                                     <th scope="col">CLIENTE</th>
                                     <th scope="col">ENDERECO</th>
                                     <th scope="col">TIPO</th>
@@ -292,7 +333,8 @@ export default function PageAgendamentosEntregas() {
 
                 
 
-            </div>
+            </div> : <></>
+            }
         </>
     )
 }

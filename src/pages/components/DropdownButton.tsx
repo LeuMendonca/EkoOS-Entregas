@@ -99,7 +99,9 @@ const DropdownButton: React.FC<PROPRIEDADES> = ({ sequencialEntrega, setSequenci
                 Ações
             </button>
             <div className={`${ styles["dropdown-content"]} ${isOpen ? styles.show : ''}`}>
-                <a onClick={openModal}>Editar</a>
+                { status != 'CANCELADO' && 
+                    <a onClick={openModal}>Editar</a>
+                }   
                 { tipoEntrega == 'ENTREGA' && status == 'FINALIZADO' && (
                  <>
                     <a onClick={ () => { geraTroca() } }>Gerar Troca</a>

@@ -3,11 +3,11 @@ import {  ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createBrowserRouter , RouterProvider } from 'react-router-dom'
 import Layout from './pages/layout/Layout.tsx'
-import PageHome from './pages/home/PageHome.tsx'
 import PageEntregadores from "./pages/entregadores/PageEntregadores.tsx";
 import PageVeiculos from "./pages/veiculos/PageVeiculos.tsx";
 import PageAgendamentosEntregas from "./pages/entregas/agendamento/PageAgendamentosEntregas.tsx";
 import PageConsultaEntregas from "./pages/entregas/consulta/PageConsultaEntregas.tsx";
+import { LoginRequerido } from "./components/loginRequerido.tsx";
 
 const router = createBrowserRouter([
   {
@@ -16,12 +16,8 @@ const router = createBrowserRouter([
   },
   {
       path: '/',
-      element: <Layout/>,
+      element: <LoginRequerido><Layout/></LoginRequerido>,
       children: [
-          {
-            path: '/home',
-            element: <PageHome/>
-          },
           {
             path: '/entregadores',
             element: <PageEntregadores/>
@@ -46,8 +42,8 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <RouterProvider router={ router }/>
-      <ToastContainer />
+        <RouterProvider router={ router }/>
+        <ToastContainer />
     </>
   )
 }

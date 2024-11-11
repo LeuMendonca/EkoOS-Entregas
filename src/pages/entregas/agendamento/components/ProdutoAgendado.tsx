@@ -23,6 +23,8 @@ interface OBJETO_SELECT {
 
 export default function ProdutoAgendado({ itens_agendados , optionsEntregadores , optionsVeiculos , setAtualiza , index }: PROPRIEDADES) {
 
+    console.log( itens_agendados )
+
     const [ abaCard , setAbaCard ] = useState(0)
 
     async function deleteItemEntregador(){

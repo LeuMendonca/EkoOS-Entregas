@@ -4,7 +4,7 @@
     max-height: 500px;
     position: fixed;
     background-color: #252838;
-    top: 20%;
+    top: 10%;
     transform: opacity .9s;
     visibility: hidden;
     border-radius: 1rem;
@@ -23,7 +23,7 @@
         top: 0;
         opacity: 0;
     }to{
-        top: 20%;
+        top: 10%;
         opacity: 1;
     }
 }

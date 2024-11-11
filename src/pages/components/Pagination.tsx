@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styles from './Pagination.module.css';
+import animation from '../../components/animation.module.css'
 
 interface PROPRIEDADES {
     total_registros: number;
@@ -16,7 +17,7 @@ export default function Pagination({ total_registros, setOffset }: PROPRIEDADES)
     const endPage = Math.min(totalPaginas, currencyPage + maxPagesAround + 1);
 
     return (
-        <div className={styles.pagination}>
+        <div className={`${styles.pagination} ${animation.introX}`}>
             <span onClick={() => {setCurrencyPage(0);setOffset(0)}}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-chevrons-left"><path d="m11 17-5-5 5-5"/><path d="m18 17-5-5 5-5"/></svg>
             </span>

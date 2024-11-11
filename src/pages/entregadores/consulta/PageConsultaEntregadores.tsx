@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { api } from '../../../services/axios'
 import styles from './PageConsulta.module.css'
+import animation from '../../../components/animation.module.css'
 
 interface ENTREGADORES {
     sequencial: number,
@@ -31,7 +32,7 @@ export default function PageConsultaEntregadores({ setCodigoEntregador , setAba 
     return (
         <div className={styles.banner}>
             <div className={styles.tabela}>
-                <table className={ styles.table }>                 
+                <table className={`${ styles.table } ${ animation.introY}`}>                 
 
                     <thead>
                         <tr>

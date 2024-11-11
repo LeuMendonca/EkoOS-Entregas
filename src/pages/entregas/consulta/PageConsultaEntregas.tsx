@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { api } from '../../../services/axios'
 import styles from './PageConsultaEntregas.module.css'
+import animation from '../../../components/animation.module.css'
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Select from 'react-select'
 import Pagination from '../../components/Pagination';
 import ModalConsulta from './components/ModalConsulta';
+import { usuarioAutenticado } from '../../../context/useAutenticacao';
+import { getUserLocalStorage } from '../../../context/AutenticacaoContext';
 
 interface OBJETO_SELECT {
     value: string;
@@ -26,6 +29,13 @@ interface VENDAS {
     status: string;
     obs: string;
     tipo_entrega: string;
+}
+
+interface SESSAO{
+    seq_tenant: string;
+    login: string;
+    type_user: string;
+    nome_empresa: string;
 }
 
 const status = [
@@ -75,6 +85,36 @@ const customStyles = {
 };
 
 export default function PageConsultaEntregas() {
+
+    const AutenticacaoContext = usuarioAutenticado();
+
+    const inicializaSessao = {
+        seq_tenant: '',
+        login: '',
+        type_user: '',
+        nome_empresa: '',
+    }
+
+    const[sessao, setSessao] = useState<SESSAO>(inicializaSessao)
+
+    useEffect(() => {
+        
+        const sessao = getUserLocalStorage();
+
+        if (sessao) {
+
+            const dadosSessao = {   
+                seq_tenant: sessao.seq_tenant,
+                login: sessao.login,
+                type_user: sessao.type_user, 
+                nome_empresa: sessao.nome_empresa, 
+            }
+
+            setSessao(dadosSessao)
+
+        } 
+
+    }, [])
 
     // Ferramentas para o modal de consulta
     const [ isActive , setIsActive ] = useState(false)
@@ -181,9 +221,10 @@ export default function PageConsultaEntregas() {
 
     return (
         <>
+            { +sessao.seq_tenant > 0 && 
             <div className={ styles["banner"]}>
                 <div className={ styles.section}>
-                    <form id={styles.pesquisa} onSubmit={handleSubmit(submitFormPesquisa)}>
+                    <form id={styles.pesquisa} onSubmit={handleSubmit(submitFormPesquisa)} className={ animation.introX}>
                         <div className={styles["form-control"]}>
                             <label>Veiculo:</label>
                             <Controller
@@ -256,17 +297,19 @@ export default function PageConsultaEntregas() {
                                 }}                                        
                             />
                         </div>
-
-                        <input className={styles.botaopesquisar} type="submit" value="Pesquisar"></input>
-                        <input onClick={() => limparFiltros()} className={styles.botaopesquisar} type="button" value="Limpar"></input>
+                        
+                        <div className={ styles["row-btn"]}>
+                            <input onClick={() => limparFiltros()} className={styles.botaopesquisar} type="button" value="Limpar"></input>
+                            <input className={styles.botaopesquisar} type="submit" value="Pesquisar"></input>
+                        </div>
                     </form >
 
                     <div className={styles.tabela}>
-                        <table className={ styles.table }>
+                        <table className={ `${ styles.table } ${ animation.introY }` }>
 
                             <thead>
                                 <tr>
-                                    <th scope="col">Pedido</th>
+                                    <th scope="col">PEDIDO</th>
                                     <th scope="col">CLIENTE</th>
                                     <th scope="col">STATUS</th>
                                     <th scope='col'>TIPO ENTREGA</th>
@@ -314,6 +357,7 @@ export default function PageConsultaEntregas() {
                 sequencialEntrega={ sequencialEntrega }
                 />
                 </div>
+            }
         </>
     )
 }

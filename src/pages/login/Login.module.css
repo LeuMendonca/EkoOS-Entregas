@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Blinker:wght@100;200;300;400;600;700;800;900&family=Poppins&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -11,30 +13,57 @@ body {
 .containerCenter {
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
+    background-image: url('./../../img/banner-login.jpg'), linear-gradient(#DDBFA3 , #DDBFA3);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
 }
 
-.img-logo {
-    width: 300px;
+.titles {
+    display: flex;    
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
+
+.titles h2 {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 2.1rem;
+}
+
+.titles h3 {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 1.7rem;
+}
+
+.img-login {
+    width: 500px;
+}
+
 
 .login {
-    margin-top: 24px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     gap: 16px;
-    width: 600px;
-    border: 1px solid #f2f2f2;
-    background-color: #F2F2F2;
+    width: 400px;
+    height: 70vh;
+    background-color: #f2f2f2;
+    color: #444;
     padding: 3rem;
     border-radius: 5px;
 
     form {
-        color: black;
+        color: #000;
         padding-bottom: 16px;
         font-size: 18px;
         display: flex;
@@ -44,19 +73,17 @@ body {
     }
 
     form button {
-        height: 40px;
-        font-size: 16px;
-        background-color: #003cff;
-        border: 0;
-        border-radius: 8px;
-        color: #FFF;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        padding: 1rem 0;
+        background-color: #DDBFA3;
+        border: none;
+        border-radius: 1.3rem;
+        color: #000;
         transition: all 0.5s;
         opacity: 0.8;
         cursor: pointer;
-        
+        width: 50%;
+        align-self: center;
+        margin-top: 2rem;
     }
 
     form button:hover {
@@ -66,22 +93,42 @@ body {
 
 .input {
     height: 40px;
-    border: 1px solid #8a8a8a;
-    padding: 0 16px;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: black;
+    border: none;
+    border-bottom: 1px solid #8a8a8a;
+    color: #555;
     font-size: 16px;
     outline: none;
+    background-color: transparent;
 }
 
 .input::placeholder {
-    color: #AAA;
+    color: #555;
 }
 
 .text {
     color: #FFF;
     text-decoration: none;
+}
+
+.formControl {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.textError {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: rgb(235, 62, 62);
+    font-size: 11px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.textError svg {
+    width: 18px;
+    height: 18px;
 }
 
 @media (max-width: 620px) {

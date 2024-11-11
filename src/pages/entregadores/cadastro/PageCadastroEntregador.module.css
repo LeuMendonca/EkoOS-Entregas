@@ -1,5 +1,4 @@
 .banner {
-    background-image: url("https://esales.com.br/wp-content/uploads/2022/08/post_thumbnail-17167e2d117f53637821bc29d31e52ee-2048x1152.jpeg");
     height: 20rem;
     display: flex;
     background-size: auto;
@@ -21,7 +20,7 @@
     color: white;
     align-items: center;
     margin-top: 2rem;
-    padding: 50px 20px;
+    padding: 1.5rem 20px;
     position: relative;
 }
 #formulario legend{

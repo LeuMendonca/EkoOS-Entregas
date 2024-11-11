@@ -1,6 +1,7 @@
 import { toast } from 'react-toastify';
 import { api } from '../../../services/axios';
 import styles from './PageCadastroVeiculo.module.css'
+import animation from '../../../components/animation.module.css'
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -81,7 +82,7 @@ export default function PageCadastroVeiculo({ codigoVeiculo , setAba }: PROPRIED
     
     return (
     <div className={styles.banner}>
-        <div className={styles.tabela}>
+        <div className={ `${ styles.tabela } ${ animation.introY }` }>
             <form onSubmit={handleSubmit(handleSubmitForm)} id={styles.formulario} >
                 <button onClick={() => setAba(0)} className={ styles['btn-return'] }>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-undo-2"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>
