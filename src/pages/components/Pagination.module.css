@@ -7,7 +7,7 @@
 }
 
 .pagination span {
-    background-color: #161a2d;
+    background-color: #058aff;
     padding: .8rem .8rem;
     color: white;
     opacity: .8;
@@ -27,7 +27,7 @@
 }
 
 .active {
-    background-color: #F2F2F2 !important;
-    color: #161a2d !important;
-    border: #161a2d 1.5px solid;
+    background-color: #fff !important;
+    color: #058aff !important;
+    border: #058aff 1.5px solid;
 }

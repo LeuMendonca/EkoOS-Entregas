@@ -1,4 +1,4 @@
-import Login from "./pages/login/Login"
+import Login from "./pages/login/PageLogin.tsx"
 import {  ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createBrowserRouter , RouterProvider } from 'react-router-dom'
@@ -28,7 +28,8 @@ const router = createBrowserRouter([
           },
           {
             path: '/entregas',
-            element: <PageAgendamentosEntregas/>
+            element: <PageAgendamentosEntregas/>,
+            
           },
           {
             path: '/consultar-entregas',
@@ -43,7 +44,7 @@ function App() {
   return (
     <>
         <RouterProvider router={ router }/>
-        <ToastContainer />
+        <ToastContainer autoClose={ 1500 } position="bottom-right"/>
     </>
   )
 }

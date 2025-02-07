@@ -6,13 +6,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { api } from '../../../services/axios'
 import { toast } from 'react-toastify'
 import { useEffect } from 'react'
+import { SESSAO } from '../PageEntregadores'
 
 interface PROPRIEDADES {
     setAba: ( aba: number ) => void;
     codigoEntregador: number;
+    sessao: SESSAO;
 }
 
-export default function PageCadastroEntregador({ setAba , codigoEntregador }: PROPRIEDADES) {
+export default function PageCadastroEntregador({ setAba , codigoEntregador , sessao }: PROPRIEDADES) {
 
     const schema = z.object({
         dbedNome: z.string().trim().min(1,'Nome do entregador é obrigatório!'),
@@ -40,10 +42,12 @@ export default function PageCadastroEntregador({ setAba , codigoEntregador }: PR
         if( codigoEntregador <= 0 ){
             
             const response = await api.post('entregadores/',{
+                params: {
+                    seq_tenant: sessao.seq_tenant,
+                    seq_tenant_user: sessao.seq_tenant_user,
+                },
                 body: data
             })
-    
-            console.log( response )
     
             if( response.data.Status == 200 ){
                 toast.success(response.data.Mensagem,{position: 'bottom-right'});
@@ -56,6 +60,8 @@ export default function PageCadastroEntregador({ setAba , codigoEntregador }: PR
             
             const response = await api.put('entregadores/',{
                 params: {
+                    seq_tenant: sessao.seq_tenant,
+                    seq_tenant_user: sessao.seq_tenant_user,
                     codigo_entregador: codigoEntregador
                 },
                 body: data
@@ -101,38 +107,68 @@ export default function PageCadastroEntregador({ setAba , codigoEntregador }: PR
                 <div className={styles.tabela}>
                     <form onSubmit={handleSubmit(handleSubmitForm)} id={styles.formulario} className={ animation.introY}>
                         <button onClick={() => setAba(0)} className={ styles['btn-return'] }>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-undo-2"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
                         </button>
 
                         <legend>Cadastrar Entregador</legend>
 
                         <div>
                             <label>Nome:</label>
-                            <input { ...register('dbedNome')} className={styles.camponome} type="text"></input>
+                            <input 
+                                autoComplete='off' 
+                                { ...register('dbedNome')} 
+                                className={styles.camponome} 
+                                type="text"
+                            />
                         </div>
 
                         <div>
                             <label>Contato:</label>
-                            <input { ...register('dbedContato') } className={styles.campousuario} type="text"></input>
+                            <input 
+                                autoComplete='off' 
+                                { ...register('dbedContato') }
+                                className={styles.campousuario} 
+                                type="text"
+                            />
                         </div>
 
                         <div>
                             <label>E-mail:</label>
-                            <input { ...register('dbedEmail') } className={styles.campousuario} type="text"></input>
+                            <input 
+                                autoComplete='off' 
+                                { ...register('dbedEmail') }
+                                className={styles.campousuario} 
+                                type="text"
+                            />
                         </div>
 
                         <div>
                             <label>Usuario:</label>
-                            <input { ...register('dbedUsuario') } className={styles.campousuario} type="text"></input>
+                            <input 
+                                autoComplete='off' 
+                                { ...register('dbedUsuario') }
+                                className={styles.campousuario} 
+                                type="text"
+                            />
                         </div>
 
                         <div>
                             <label>Senha:</label>
-                            <input { ...register('dbedSenha' )} className={styles.camposenha} type="password"></input>
+                            <input 
+                                autoComplete='off' 
+                                { ...register('dbedSenha' )}
+                                className={styles.camposenha} 
+                                type="password"
+                            />
                         </div>
 
                         <div className={styles.botoes}>
-                            <input className={styles.botaocadastrar} type="submit" value={ codigoEntregador > 0 ? 'Atualizar' : 'Cadastrar'}/>
+                            <button 
+                                className={styles.botaocadastrar} 
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-check-check"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></svg>
+                                Salvar
+                            </button>
                         </div>
                     </form>
                 </div>

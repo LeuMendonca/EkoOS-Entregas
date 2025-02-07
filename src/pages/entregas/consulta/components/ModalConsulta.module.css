@@ -3,7 +3,7 @@
     width: 70%;
     max-height: 500px;
     position: fixed;
-    background-color: #252838;
+    background-color: #fff;
     top: 10%;
     transform: opacity .9s;
     visibility: hidden;
@@ -52,10 +52,10 @@
     padding: 2rem;
     gap: 1rem;
     /* background-color: #7a7d8a; */
-    border: 1px solid #F2F2F2;
+    border: 1px solid #ccc;
     margin: 1.2rem;
     border-radius: .3rem;
-    color: #F2F2F2;
+    color: #000;
     margin-top: 2.3rem;
 }
 
@@ -63,7 +63,7 @@
     position: absolute;
     top: -15px;
     left: 10px;
-    background-color: #252838;
+    background-color: #fff;
 }
 
 .clienteEndereco {
@@ -84,10 +84,10 @@
     flex-direction: column;
     padding: 2rem;
     gap: 1rem;
-    border: 1px solid #F2F2F2;
+    border: 1px solid #ccc;
     margin: 1.2rem;
     border-radius: .3rem;
-    color: #F2F2F2;
+    color: #000;
     margin-top: 2.3rem;
 }
 
@@ -95,15 +95,15 @@
     position: absolute;
     top: -15px;
     left: 10px;
-    background-color: #252838;
+    background-color: #fff;
 }
 
 .rowItem {
     display: grid;
     grid-template-columns: 50% 20% 10% 20%;
-    background-color: #373c55;
+    background-color: #fff;
     padding: .8rem 2rem;
     border-radius: .3rem;
     gap: 1rem;
-    border: #F2F2F2 1px solid;
+    border: #ccc 1px solid;
 }

@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import FormularioAtualizacao from './FormularioAtualizacao';
 import { toast } from 'react-toastify';
 import { api } from '../../../../services/axios';
+import { SESSAO } from '../PageAgendamentosEntregas';
 
 
 interface PROPRIEDADES {
@@ -13,6 +14,7 @@ interface PROPRIEDADES {
     optionsVeiculos: OBJETO_SELECT[];
     setAtualiza: ( atualiza: any ) => void;
     index: number;
+    sessao: SESSAO;
 }
 
 interface OBJETO_SELECT {
@@ -21,7 +23,7 @@ interface OBJETO_SELECT {
 }
 
 
-export default function ProdutoAgendado({ itens_agendados , optionsEntregadores , optionsVeiculos , setAtualiza , index }: PROPRIEDADES) {
+export default function ProdutoAgendado({ itens_agendados , optionsEntregadores , optionsVeiculos , setAtualiza , index , sessao }: PROPRIEDADES) {
 
     console.log( itens_agendados )
 
@@ -30,7 +32,9 @@ export default function ProdutoAgendado({ itens_agendados , optionsEntregadores 
     async function deleteItemEntregador(){
         const response = await api.delete("entregas/modal/agendados",{
             params: {
-                sequencial: itens_agendados.sequencial
+                sequencial: itens_agendados.sequencial,
+                seq_tenant: sessao.seq_tenant,
+                seq_tenant_user: sessao.seq_tenant_user
             }
         })
 
@@ -62,13 +66,12 @@ export default function ProdutoAgendado({ itens_agendados , optionsEntregadores 
 
             { abaCard == 0 ?
                 <div className={`${styles["row-item-agendado"]}`}>
-                    {/* <span className={`${styles['input-form']} ${styles["disabled-input"]}`}>{itens_agendados.sequencial_item}</span> */}
-                    <span className={`${styles['input-form']} ${styles["disabled-input"]}`}>{itens_agendados.cod_produto}</span>
-                    <span className={`${styles['input-form']} ${styles['input-form-text']} ${styles["disabled-input"]}`}>{itens_agendados.desc_produto}</span>
-                    <span className={`${styles['input-form']} ${styles["disabled-input"]}`}>{itens_agendados.quantidade}</span>
-                    <span className={`${styles['input-form']} ${styles['input-form-text']} ${styles["disabled-input"]}`}>{itens_agendados.entregador}</span>
-                    <span className={`${styles['input-form']} ${styles['input-form-text']} ${styles["disabled-input"]}`}>{ itens_agendados.veiculo }</span>
-                    <span className={`${styles['input-form']} ${styles['input-form-text']} ${styles["disabled-input"]}`}>{ itens_agendados.pontos }</span>
+                    <span className={`${styles["disabled-input"]}`}>{itens_agendados.cod_produto}</span>
+                    <span className={`${styles['input-form-text']} ${styles["disabled-input"]}`}>{itens_agendados.desc_produto}</span>
+                    <span className={`${styles["disabled-input"]}`}>{itens_agendados.quantidade}</span>
+                    <span className={`${styles['input-form-text']} ${styles["disabled-input"]}`}>{itens_agendados.entregador}</span>
+                    <span className={`${styles['input-form-text']} ${styles["disabled-input"]}`}>{ itens_agendados.veiculo }</span>
+                    <span className={`${styles['input-form-text']} ${styles["disabled-input"]}`}>{ itens_agendados.pontos }</span>
                     <span className={ styles["span-icons"]}>
                         <a onClick={() => setAbaCard( 1 )}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-square-pen"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg>

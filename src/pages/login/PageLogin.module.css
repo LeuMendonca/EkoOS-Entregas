@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Blinker:wght@100;200;300;400;600;700;800;900&family=Poppins&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: white;
+    background-image: none;
+}
+
+.containerCenter {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-image: url('./../../img/banner-login.jpg'), linear-gradient(#027fe9  , #027fe9 );
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+.img-login {
+    width: 500px;
+}

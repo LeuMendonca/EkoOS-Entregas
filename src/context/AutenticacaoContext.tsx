@@ -53,15 +53,16 @@ export const AuthProvider = ({ children }: PROVEDOR_AUTENTICACAO) => {
             }
         }) 
 
+        console.log("Aqui está os dados do login: ", response.data )
+
         const dadosLogin  = {   
             seq_tenant: response.data.Usuario[0].seq_tenant,
+            seq_tenant_user: response.data.Usuario[0].seq_tenant_user,
             login: response.data.Usuario[0].login,
             type_user: response.data.Usuario[0].type_user,
             seq_entregador: response.data.Usuario[0].seq_entregador,
             nome_empresa: response.data.Usuario[0].nome_empresa,
         }
-
-        console.log( "Dados:" , dadosLogin )
 
         setUsuario(dadosLogin);
         setUserLocalStorage(dadosLogin);                

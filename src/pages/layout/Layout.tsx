@@ -15,6 +15,8 @@ export default function Layout() {
 
     const AutenticacaoContext = usuarioAutenticado();
 
+    const [ accordionSidebar , setAccordionSideBar ] = useState( true )
+
     const inicializaSessao = {
         seq_tenant: '',
         login: '',
@@ -48,9 +50,16 @@ export default function Layout() {
         <>
             {  +sessao.seq_tenant > 0 ?
                 <div>
-                    <aside className={styles.sidebar}>
+                    
+
+                    <aside className={`${styles.sidebar} ${ accordionSidebar ? styles['sidebar-open'] : styles['sidebar-close']}`}>
+                        
                         <div className={styles.sidebarheader}>
+                            <button className={ styles['btn-close-open-sidebar'] } onClick={() => setAccordionSideBar(!accordionSidebar)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-align-justify"><path d="M3 12h18"/><path d="M3 18h18"/><path d="M3 6h18"/></svg>
+                            </button>
                             <span className={styles.materialsymbolsoutlined}></span><h2>EkoOS Entregas</h2>
+                            
                         </div>
                         <ul className={styles.sidebarlinks}>
                             <h4>
@@ -109,36 +118,33 @@ export default function Layout() {
                             </li>
                         </ul>
 
-                        <div className={ styles.userZone}>
-                            <div className={ styles.infoZone }>
-                                <div>
-                                    <span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                                    </span>
-                                    <div className={ styles.infoUser }>
-                                        <span>{ sessao.login }</span>
-                                        <span className={ styles.typeUser }>{ +sessao.type_user == 1 ? 'Administrador' : +sessao.type_user == 2 ? 'Gerente' : 'Entregador' }</span>
+                        { accordionSidebar && 
+                            <div className={ styles.userZone}>
+                                <div className={ styles.infoZone }>
+                                    <div>
+                                        <span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                        </span>
+                                        <div className={ styles.infoUser }>
+                                            <span>{ sessao.login }</span>
+                                            <span className={ styles.typeUser }>{ +sessao.type_user == 1 ? 'Administrador' : +sessao.type_user == 2 ? 'Gerente' : 'Entregador' }</span>
+                                        </div>
                                     </div>
-                                </div>
-                                
-                                <div>
-                                    <span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-briefcase-business"><path d="M12 12h.01"/><path d="M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><path d="M22 13a18.15 18.15 0 0 1-20 0"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>
-                                    </span>
-                                    <span>{ sessao.nome_empresa }</span>
+
                                 </div>
 
+                                <a onClick={ () => AutenticacaoContext.logout() }>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
+                                    Logoff
+                                </a>
                             </div>
-
-                            <a onClick={ () => AutenticacaoContext.logout() }>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-log-out"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
-                                Logoff
-                            </a>
-                        </div>
+                        }
                     </aside>
 
-                    <div className={styles['div-outlet']}>
-                        <Outlet/>
+                    <div className={accordionSidebar ? styles['div-outlet-sidebar-open'] : styles['div-outlet-sidebar-close'] }>
+                        <Outlet context={{
+                            statusSidebar: accordionSidebar
+                        }} />
                     </div>
                 </div> 
                 : <></>

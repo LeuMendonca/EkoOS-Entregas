@@ -7,6 +7,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import ProdutoAgendado from './ProdutoAgendado';
 import { api } from '../../../../services/axios';
+import { SESSAO } from '../PageAgendamentosEntregas';
+import { useOutletContext } from 'react-router-dom';
 
 interface OBJETO_SELECT {
     value: string; 
@@ -19,6 +21,7 @@ interface PROPRIEDADES {
     sequencialEntrega: number;
     optionsEntregadores: OBJETO_SELECT[];
     optionsVeiculos: OBJETO_SELECT[];
+    sessao: SESSAO;
 }
 
 interface VENDA_MODAL {
@@ -52,12 +55,17 @@ export interface ITEM_VENDA_MODAL_AGENDADOS {
     pontos: string;
 }
 
+interface CONTEXT_OUTLET {
+    statusSidebar: boolean
+}
+
 export const customStyles = {
     control: (provided: any) => ({
       ...provided,
-      backgroundColor: '#2c2f3a', // Fundo do controle do Select (diferente do fundo da tela)
-      borderColor: '#5a5d6a',     // Borda clara para contraste
-      color: 'white',
+      backgroundColor: 'transparent', // Fundo do controle do Select (diferente do fundo da tela)
+      borderColor: '#ccc',     // Borda clara para contraste
+      color: '#231a1e',
+      width: '100%' ,
       boxShadow: 'none',
       '&:hover': {
         borderColor: '#7a7d8a',   // Borda ao passar o mouse
@@ -65,27 +73,28 @@ export const customStyles = {
     }),
     singleValue: (provided: any) => ({
       ...provided,
-      color: 'white', // Cor do texto da opção selecionada
+      color: '#231a1e', // Cor do texto da opção selecionada
     }),
     menu: (provided: any) => ({
       ...provided,
-      backgroundColor: '#2c2f3a', // Fundo do menu de opções
+      backgroundColor: 'transparent', // Fundo do menu de opções
+      zIndex: 9999
     }),
     option: (provided: any, state: any) => ({
       ...provided,
-      backgroundColor: state.isFocused ? '#3a3d4a' : '#2c2f3a', // Cor das opções, mudando no hover
-      color: state.isFocused ? 'white' : '#b0b3c5', // Texto claro para contraste
+      backgroundColor: state.isFocused ? '#DDD' : '#fff', // Cor das opções, mudando no hover
+      color: state.isFocused ? 'black' : '#000', // Texto claro para contraste
       '&:active': {
-        backgroundColor: '#4a4d5a',
+        backgroundColor: '#DDD',
       },
     }),
-    placeholder: (provided:any) => ({
+    placeholder: (provided: any) => ({
       ...provided,
-      color: '#b0b3c5', // Cor do texto do placeholder
+      color: '#2c2f3a', // Cor do texto do placeholder
     }),
   };
 
-export default function Modal({ isActive , setIsActive , sequencialEntrega , optionsEntregadores , optionsVeiculos }: PROPRIEDADES) {
+export default function Modal({ isActive , setIsActive , sequencialEntrega , optionsEntregadores , optionsVeiculos , sessao }: PROPRIEDADES) {
 
     const [ venda , setVenda ] = useState<VENDA_MODAL>({} as VENDA_MODAL)
     const [ atualiza , setAtualiza ] = useState(false)
@@ -96,6 +105,8 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
 
     const [ showNumeroIndicador , setShowNumeroIndicador ] = useState( false )
     const [ numeroIndicador , setNumeroIndicador] = useState( 0 )
+    const contextOutlet = useOutletContext<CONTEXT_OUTLET | null >()
+
     async function getVendaModal(){
         
         const response = await api.get("entregas/modal",{
@@ -147,7 +158,7 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
 
     type FORMULARIO_MODAL = z.infer<typeof schemaFormItemDinamico>;
 
-    const { reset, register , control , handleSubmit ,  formState: { errors } } = useForm<FORMULARIO_MODAL>({        
+    const { reset, register , control , setValue , handleSubmit ,  formState: { errors } } = useForm<FORMULARIO_MODAL>({        
         resolver: zodResolver(schemaFormItemDinamico),
         defaultValues: {
             dbedVeiculo: '',
@@ -159,7 +170,9 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
 
         const response = await api.post("entregas/modal",{
             params: {
-                sequencial_entrega: sequencialEntrega
+                sequencial_entrega: sequencialEntrega,
+                seq_tenant: sessao.seq_tenant,
+                seq_tenant_user: sessao.seq_tenant_user,
             },
             body: data
         })
@@ -183,7 +196,9 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
     async function deleteItemEntrega( sequencial: number ){
         const response = await api.delete("entregas/modal",{
             params: {
-                sequencial: sequencial
+                sequencial: sequencial,
+                seq_tenant: sessao.seq_tenant,
+                seq_tenant_user: sessao.seq_tenant_user,
             }
         })
 
@@ -201,11 +216,20 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
         }
 
     },[ sequencialEntrega , atualiza , isActive ])
+
+    useEffect(() => {
+
+        const hoje = new Date();
+        const dataHoje = `${hoje.getFullYear()}-${String(hoje.getUTCMonth() + 1).padStart(2, '0')}-${String(hoje.getUTCDate()).padStart(2, '0')}`;
+        
+        
+        setValue('dbedDataEntrega', dataHoje)
+    })
     
     return (
         <div>
             <form 
-                className={ isActive ? `${styles.modal} ${styles.active}` : styles.modal }
+                className={ isActive ? `${styles.modal} ${styles.active} ${ contextOutlet?.statusSidebar ? styles['modal-sidebar-open'] : styles['modal-sidebar-close'] }` : styles.modal }
                 onSubmit={handleSubmit(handleSubmitModal)}
             >
                 <button type='button' onClick={() => { setIsActive( false );reset() }} className={ styles['btn-close-modal']}>
@@ -266,8 +290,9 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
                                             render={({field}) => {  
                                                 return(
                                                     <Select
-                                                        options={  optionsEntregadores }
+                                                        options={  optionsEntregadores.filter( item => item.value != '') }
                                                         isMulti
+                                                        placeholder='Selecione...'
                                                         styles={customStyles}
                                                         value={field.value?.map( ( value: any ) => optionsEntregadores.find(option => option.value === value)!).filter(Boolean) || []}
                                                         onChange={(option: readonly OBJETO_SELECT[]) => {
@@ -319,6 +344,7 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
                                     optionsVeiculos={optionsVeiculos}
                                     setAtualiza={ setAtualiza }
                                     index={ index }
+                                    sessao={ sessao }
                                 />
                                 
                             )))
@@ -372,7 +398,10 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
                 </section>
 
                 <section className={ styles["section-button"]}>
-                    <button className={ styles["btn-finalizar"]} type="submit"><b>Finalizar</b></button>
+                    <button className={ styles["btn-finalizar"]} type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-check-check"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></svg>
+                        <b>Finalizar</b>
+                    </button>
                 </section>
             </form>
         </div>

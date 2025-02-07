@@ -9,28 +9,27 @@ import { Controller, useForm } from 'react-hook-form';
 import Pagination from '../../components/Pagination';
 import Modal from './components/Modal';
 import DropdownButton from '../../components/DropdownButton';
-import { usuarioAutenticado } from '../../../context/useAutenticacao';
 import { getUserLocalStorage } from '../../../context/AutenticacaoContext';
 
 const status = [
-    { value: '' , label: 'TODOS'},
-    { value: 'EM ABERTO' , label: 'EM ABERTO'},
-    { value: 'FINALIZADO' , label: 'FINALIZADO'}
+    { value: '' , label: 'Todos'},
+    { value: 'EM ABERTO' , label: 'Em Aberto'},
+    { value: 'FINALIZADO' , label: 'Finalizado'}
 ]
 
 const tipo_entrega = [
     { value: '' , label: 'Selecione...'},
-    { value: 'E' , label: 'ENTREGA'},
-    { value: 'R' , label: 'RECOLHIMENTO'},
-    { value: 'T' , label: 'TROCA'},
+    { value: 'E' , label: 'Entrega'},
+    { value: 'R' , label: 'Recolhimento'},
+    { value: 'T' , label: 'Troca'},
 ]
 
 const customStyles = {
     control: (provided: any) => ({
       ...provided,
-      backgroundColor: '#2c2f3a', // Fundo do controle do Select (diferente do fundo da tela)
-      borderColor: '#5a5d6a',     // Borda clara para contraste
-      color: 'white',
+      backgroundColor: 'transparent', // Fundo do controle do Select (diferente do fundo da tela)
+      borderColor: '#ccc',     // Borda clara para contraste
+      color: '#231a1e',
       width: '100%' ,
       boxShadow: 'none',
       '&:hover': {
@@ -39,19 +38,19 @@ const customStyles = {
     }),
     singleValue: (provided: any) => ({
       ...provided,
-      color: 'white', // Cor do texto da opção selecionada
+      color: '#231a1e', // Cor do texto da opção selecionada
     }),
     menu: (provided: any) => ({
       ...provided,
-      backgroundColor: '#2c2f3a', // Fundo do menu de opções
+      backgroundColor: 'transparent', // Fundo do menu de opções
       zIndex: 9999
     }),
     option: (provided: any, state: any) => ({
       ...provided,
-      backgroundColor: state.isFocused ? '#3a3d4a' : '#2c2f3a', // Cor das opções, mudando no hover
-      color: state.isFocused ? 'white' : '#b0b3c5', // Texto claro para contraste
+      backgroundColor: state.isFocused ? '#DDD' : '#fff', // Cor das opções, mudando no hover
+      color: state.isFocused ? 'black' : '#000', // Texto claro para contraste
       '&:active': {
-        backgroundColor: '#4a4d5a',
+        backgroundColor: '#DDD',
       },
     }),
     placeholder: (provided: any) => ({
@@ -60,8 +59,9 @@ const customStyles = {
     }),
   };
 
-interface SESSAO{
+export interface SESSAO{
     seq_tenant: string;
+    seq_tenant_user: string;
     login: string;
     type_user: string;
     nome_empresa: string;
@@ -84,10 +84,9 @@ interface OBJETO_SELECT {
 
 export default function PageAgendamentosEntregas() {
 
-    const AutenticacaoContext = usuarioAutenticado();
-
     const inicializaSessao = {
         seq_tenant: '',
+        seq_tenant_user: '',
         login: '',
         type_user: '',
         nome_empresa: '',
@@ -103,6 +102,7 @@ export default function PageAgendamentosEntregas() {
 
             const dadosSessao = {   
                 seq_tenant: sessao.seq_tenant,
+                seq_tenant_user: sessao.seq_tenant_user,
                 login: sessao.login,
                 type_user: sessao.type_user, 
                 nome_empresa: sessao.nome_empresa, 
@@ -138,7 +138,7 @@ export default function PageAgendamentosEntregas() {
         resolver: zodResolver(schema),
         defaultValues: {
             dbedPedido: '',
-            dbedStatus: '',
+            dbedStatus: 'EM ABERTO',
             dbedTipoEntrega: '',
             dbedCliente: ''
         }
@@ -166,7 +166,7 @@ export default function PageAgendamentosEntregas() {
             params: {
                 query_tipoEntrega: '',
                 query_pedido: '',
-                query_status: '',
+                query_status: 'EM ABERTO',
                 query_cliente: '',
                 offset
             }
@@ -215,6 +215,12 @@ export default function PageAgendamentosEntregas() {
                     <form id={styles.pesquisa} className={ animation.introX } onSubmit={handleSubmit(submitForm)}>
                         <div className={ styles["row-input"]}>
                             <div className={ styles["form-control"]}>
+                                <label>Cliente</label>
+                                
+                                <input {...register("dbedCliente")} type="text" className={` ${styles['input-form-control']} ${ styles['input-cliente']}`}/>
+                            </div>
+
+                            <div className={ styles["form-control"]}>
                                 <label>Número do Pedido</label>
                                 
                                 <input {...register("dbedPedido")} type="text" className={ styles['input-form-control'] }/>
@@ -259,68 +265,74 @@ export default function PageAgendamentosEntregas() {
                                     }}                                        
                                 />
                             </div>
-
-                            <div className={ styles["form-control"]}>
-                                <label>Cliente</label>
-                                
-                                <input {...register("dbedCliente")} type="text" className={` ${styles['input-form-control']} ${ styles['input-cliente']}`}/>
-                            </div>
                         </div>
 
                         <div className={ styles["row-btn"]}>
-                            <input onClick={() => limparFiltros()} className={styles.botaopesquisar} type="button" value="Limpar"/>
-                            <input className={styles.botaopesquisar} type="submit" value="Pesquisar"/>
+                            <button 
+                                onClick={() => limparFiltros()} 
+                                className={styles['btn-limpar']}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-refresh-ccw"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
+                                    Limpar
+                            </button>
+                            <button className={styles['btn-search']}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                                Pesquisar
+                            </button>
                             
                         </div>
                     </form >
 
-                    <div className={styles.tabela}>
-                        <table className={ `${ styles.table } ${ animation.introY }` }>
+                    <div className={`${styles.tabela} ${ animation.introY }`}>
 
-                            <thead>
-                                <tr>
-                                    <th scope="col">PEDIDO</th>
-                                    <th scope="col">CLIENTE</th>
-                                    <th scope="col">ENDERECO</th>
-                                    <th scope="col">TIPO</th>
-                                    <th>DATA</th>
-                                    <th>STATUS</th>
-                                    <th scope="col">AÇÕES</th>
-                                </tr>
-                            </thead>
+                        <div className={ styles['header-table']}>
+                            <span>Pedido/Entrega</span>
+                            <span className={ styles['text-left']}>Cliente</span>
+                            <span>Endereço</span>
+                            <span>Tipo</span>
+                            <span>Data</span>
+                            <span>Status</span>
+                            <span>Ações</span>
+                        </div>
 
-                            <tbody>
-                                {
-                                    vendas && 
-                                        vendas.map( venda =>  (
-                                            <tr>
-                                                <td scope="row">{ venda.pedido }</td>
-                                                <td>{ venda.cliente }</td>
-                                                <td>{ venda.endereco }</td>
-                                                <td>{ venda.tipo_entrega }</td>
-                                                <td>{ venda.data_venda}</td>
-                                                <td>{ venda.status }</td>
-                                                <td>
-                                                    <DropdownButton
-                                                        setIsActive={ setIsActive }
-                                                        setSequencialEntrega={ setSequencialEntrega }
-                                                        sequencialEntrega={ venda.sequencial}
-                                                        tipoEntrega={ venda.tipo_entrega }
-                                                        status={ venda.status }
-                                                        setAtualiza={ setAtualiza }
-                                                    />
-                                                </td>
-                                            </tr>
-                                        ))
-                                }
-                                
-                            </tbody>
-                        </table>
+                        {
+                            vendas && 
+                                vendas.map( venda =>  (
+                                    <div className={ styles['row-item']}>
+                                        <span>{ venda.pedido } / { venda.sequencial }</span>
+                                        <span className={styles['text-left']}>{ venda.cliente }</span>
+                                        <span>{ venda.endereco }</span>
+                                        <span>{ venda.tipo_entrega }</span>
+                                        <span>{ venda.data_venda}</span>
+                                        <span>{ venda.status }</span>
+                                        <span>
+                                            <DropdownButton
+                                                setIsActive={ setIsActive }
+                                                setSequencialEntrega={ setSequencialEntrega }
+                                                sequencialEntrega={ venda.sequencial}
+                                                tipoEntrega={ venda.tipo_entrega }
+                                                status={ venda.status }
+                                                setAtualiza={ setAtualiza }
+                                                sessao={ sessao }
+                                            />
+                                        </span>
+                                    </div>
+                                ))
+                        }
+
+                        { !vendas && 
+                            <div className={ styles['info-null']}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-circle-x"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+                                <span>Nenhuma venda foi localizada!</span>
+                            </div>
+                        }
                     </div>
-                    <Pagination
-                    total_registros = { totalVendas }
-                    setOffset={setOffset}
-                />
+                    
+                    { vendas &&
+                        <Pagination
+                            total_registros = { totalVendas }
+                            setOffset={setOffset}
+                        />
+                    }
                 </div>
 
                 <Modal
@@ -329,6 +341,7 @@ export default function PageAgendamentosEntregas() {
                     sequencialEntrega={ sequencialEntrega }
                     optionsEntregadores={optionsEntregadores}
                     optionsVeiculos={optionsVeiculos}
+                    sessao={ sessao }
                 />
 
                 

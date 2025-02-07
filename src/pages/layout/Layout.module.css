@@ -12,20 +12,36 @@ body {
     background-size: cover;
 }
 
+.btn-close-open-sidebar {
+    position: absolute;
+    top: 20px;
+    left: 4px;
+    z-index: 9999;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    padding: .3rem;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-close-open-sidebar svg {
+    color: #fff;
+}
+
 .sidebar {
     position: fixed;
     top: 0;
     left: 0;
     height: 100%;
-    width: 200px;
     display: flex;
     overflow-x: hidden;
     flex-direction: column;
-    background: #161a2d;
+    background: #027fe9;
     padding: 25px 20px;
     transition: all 0.4s ease;
-    border-right: 1px solid #333;
-    
+    border-right: 1px solid #058aff;
 
     ul{
        margin-left: 0.5rem; 
@@ -36,14 +52,17 @@ body {
     }
 }
 
+.sidebar-close {
+    width: 0px;
+}
+
+.sidebar-open {
+    width: 180px;
+}
+
 .sidebar .sidebarheader {
     display: flex;
     align-items: center;
-}
-
-.sidebar .sidebarheader img {
-    width: 42px;
-    border-radius: 50%;
 }
 
 .sidebar .sidebarheader h2 {
@@ -60,6 +79,7 @@ body {
     white-space: nowrap;
     margin: 10px 0;
     position: relative;
+    font-size: 1.0rem;
 }
 
 .sidebarlinks h4 span {
@@ -73,7 +93,7 @@ body {
 .sidebarlinks {
     list-style: none;
     margin-top: 20px;
-    height: 80%;
+    flex: 1;
     overflow-y: auto;
     scrollbar-width: none;
 }
@@ -92,6 +112,7 @@ body {
     padding: 15px 10px;
     text-decoration: none;
     transition: 0.2s ease;
+    font-size: .8rem;
 }
 
 .sidebarlinks li a:hover {
@@ -171,8 +192,14 @@ body {
     transform: translate(30%,30%);
 }
 
-.div-outlet {
+.div-outlet-sidebar-open {
     margin-left: 240px;
+    transition: all 0.4s ease;
+}
+
+.div-outlet-sidebar-close {
+    margin-left: 50px;
+    transition: all 0.4s ease;
 }
 
 .userZone {
@@ -181,36 +208,36 @@ body {
     color: white;
     margin-left: 0.5rem; 
     gap: .5rem;
-    padding: 1rem 0;
+    padding: .6rem 0;
+    padding-bottom: 2rem;
     border-top: 1px solid #CCC;
-    margin-bottom: 1rem;
 }
 
 .userZone a {
     display: flex;
     align-items: center;
-    color: rgb(254, 65, 65);
+    color: rgb(255, 0, 0);
     padding: 15px 10px;
     gap: .4rem;
     cursor: pointer;
     transition: 0.2s ease;
+    
 }
 
 .userZone .infoZone div:not( .infoUser ) {
     display: flex;
     font-size: .8rem;
     gap: .7rem;
-    /* padding: 15px 10px; */
 }
 
 .userZone div svg {
     height: 1rem;
     width: 1rem;
     border-radius: 50%;
-    border: 1px solid #CCC;
+    border: 1px solid #027fe9;
     padding: .5rem;
-    background-color: #161a2d;
-    color: #ccc;
+    background-color: #fff;
+    color: #161a2d;
 
 }
 
@@ -229,7 +256,7 @@ body {
     flex-direction: column;
     gap: 1rem;
     border-bottom: 1px solid #CCC;
-    padding-bottom: 2.5rem;
+    padding: 1rem;
 }
 
 .infoUser {

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import styles from './DropdownButton.module.css'; // Importa o CSS para o componente
 import { api } from '../../services/axios';
 import { toast } from 'react-toastify';
+import { SESSAO } from '../entregas/agendamento/PageAgendamentosEntregas';
 
 interface PROPRIEDADES {
     setIsActive: (isActive: boolean) => void;
@@ -10,10 +11,11 @@ interface PROPRIEDADES {
     tipoEntrega: string;
     status: string;
     setAtualiza: ( atualiza: any ) => void;
+    sessao: SESSAO;
 
 }
 
-const DropdownButton: React.FC<PROPRIEDADES> = ({ sequencialEntrega, setSequencialEntrega, setIsActive , tipoEntrega , status , setAtualiza }) => {
+const DropdownButton: React.FC<PROPRIEDADES> = ({ sequencialEntrega, setSequencialEntrega, setIsActive , tipoEntrega , status , setAtualiza , sessao }) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
@@ -48,8 +50,12 @@ const DropdownButton: React.FC<PROPRIEDADES> = ({ sequencialEntrega, setSequenci
 
     async function geraTroca(){
         const response = await api.post("entregas/gera-troca",{
+            params: {
+                seq_tenant: sessao.seq_tenant,
+                seq_tenant_user: sessao.seq_tenant_user
+            },
             body: { 
-                sequencial_entrega: sequencialEntrega 
+                sequencial_entrega: sequencialEntrega,
             }
         })
 
@@ -64,6 +70,10 @@ const DropdownButton: React.FC<PROPRIEDADES> = ({ sequencialEntrega, setSequenci
 
     async function geraRecolhimento(){
         const response = await api.post("entregas/gera-recolhimento",{
+            params: {
+                seq_tenant: sessao.seq_tenant,
+                seq_tenant_user: sessao.seq_tenant_user
+            },
             body: { 
                 sequencial_entrega: sequencialEntrega 
             }
@@ -81,7 +91,9 @@ const DropdownButton: React.FC<PROPRIEDADES> = ({ sequencialEntrega, setSequenci
     async function deleteEntrega(){
         const response = await api.delete("entregas/",{
             params: {
-                sequencial_entrega: sequencialEntrega
+                sequencial_entrega: sequencialEntrega,
+                seq_tenant: sessao.seq_tenant,
+                seq_tenant_user: sessao.seq_tenant_user
             }
         })
 
@@ -108,7 +120,7 @@ const DropdownButton: React.FC<PROPRIEDADES> = ({ sequencialEntrega, setSequenci
                     <a onClick={ () => geraRecolhimento() }>Gerar Recolhimento</a></>
                 )
                 }
-                { status != 'FINALIZADO' && tipoEntrega != "ENTREGA" &&
+                { status != 'F' && ( tipoEntrega != "ENTREGA" ) &&
                     <a onClick={ () => deleteEntrega() }>Excluir</a>
                 }
             </div>

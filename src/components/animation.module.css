@@ -30,3 +30,15 @@
         opacity: 1;
     }
 }
+
+.show-opacity {
+    animation: opacityAnimation 1.9s normal;
+}
+
+@keyframes opacityAnimation {
+    from {
+        opacity: 0;
+    }to {
+        opacity: 1;
+    }
+}

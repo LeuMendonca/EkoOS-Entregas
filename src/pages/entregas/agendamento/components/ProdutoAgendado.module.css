@@ -1,27 +1,29 @@
 .row-header-item{
     margin: 1rem 1rem ;
     display: grid;
-    grid-template-columns: 10% 28% 8% 15% 15% 5% 10%;
+    grid-template-columns: 10% 25% 8% 15% 15% 5% 10%;
     padding: 1rem 1.3rem ;
     align-items: center;
     gap: 20px;
     word-wrap: break-word;
     border-radius: 10px;
-    background-color: #2c2f3a;
+    background-color: #fff;
     text-wrap: nowrap;
+    border: 1px solid #ccc;
 }
 
 .row-item-agendado{
-    margin: 0 1rem ;
+    margin: 1rem 1rem ;
     display: grid;
-    grid-template-columns: 10% 28% 8% 15% 15% 5% 10%;
+    grid-template-columns: 10% 25% 8% 15% 15% 5% 10%;
     padding: 1.6rem 1.3rem ;
     text-align: center;
     align-items: center;
     gap: 20px;
     word-wrap: break-word;
     border-radius: 10px;
-    background-color: #2c2f3a;
+    background-color: #fff;
+    border: 1px solid #ccc;
 }
 
 .row-item-agendado a , .row-item a , span a{
@@ -40,23 +42,9 @@
     background-color: #2c2f3a;
 }
 
-.input-form{
-    border: 1px solid #AAA;
-    border-radius: 10px;
-    color: #F2F2F2;
-    width: 50px;
-    text-align: center;
-    background-color: transparent;
-    padding: .5rem 1rem;
-}
-
 .input-form-text {
     width: 80%;
     text-align: start;
-}
-
-.input-form:focus {
-    outline: none;
 }
 
 .disabled-input {

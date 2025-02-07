@@ -1,5 +1,5 @@
 import { usuarioAutenticado } from "../context/useAutenticacao";
-import Login from "../pages/login/Login";
+import PageLogin from "../pages/login/PageLogin";
 
 
 export const LoginRequerido = ({ children }: {children: JSX.Element|JSX.Element[]}) => {
@@ -8,7 +8,7 @@ export const LoginRequerido = ({ children }: {children: JSX.Element|JSX.Element[
 
     if(!autenticacao.login){
         return(
-            <Login/>
+            <PageLogin/>
         )
     }
 

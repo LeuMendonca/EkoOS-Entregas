@@ -15,64 +15,85 @@
 #formulario {
     width: 80%;
     margin-left: 5rem;
-    background-color: black;
-    opacity: 0.75;
-    color: white;
+    background-color: #fff;
+    color: #000;
     align-items: center;
     margin-top: 2rem;
     padding: 1.5rem 20px;
     position: relative;
+    border-radius: .3rem;
+    box-shadow: 0px 0px 1px #231a1e;
 }
+
 #formulario legend{
-    text-align:center;
-    font-size: 2rem;
+    text-align: center;
+    font-size: 1.6rem;
     margin-bottom: 30px;
+    font-weight: 400;
 }
 #formulario label{
    display:block;
    margin-left: 1rem;
+   margin-bottom: .2rem;
+   font-size: .9rem;
 }
 
-
-#formulario input[type="text"] , #formulario input[type="password"]{
-    padding: 6px;
+#formulario input[type="text"], 
+#formulario input[type="password"]{
+    padding: 0.6rem .5rem;
     margin-bottom: 12px;
     width: 95%;
     margin-left: 1rem;
+    border-radius: .2rem;
+    border: none;
+    background-color: transparent;
+    border: 1px solid #ccc;
+    color: #231a1e;
 }
 
-#formulario input[type="text"]:active , #formulario input[type="text"]:focus , #formulario input[type="password"]:focus , #formulario input[type="password"]:active {
+#formulario input[type="text"]:active, 
+#formulario input[type="text"]:focus, 
+#formulario input[type="password"]:focus, 
+#formulario input[type="password"]:active {
     outline: none;
+    border-color: #058aff;
+    transition: border-color .3s;
 }
 
 .botaocadastrar {
-    border: none;
+    border: 1px solid #28a745;
     border-radius: .2rem;
-    padding: .7rem 4rem;
+    padding: .7rem 2.5rem;
     cursor: pointer;
     opacity: .8;
     transition: all .2s;
-    
+    background-color: #28a745;
+    color: white;    
+    display: flex;
+    justify-self: end;
+    gap: 5px;
+    font-size: 12px;
 }
 
 .botaocadastrar:hover{
-    opacity: 1;
+    background-color: white;
+    color: #28a745;
+    border: 1px solid #28a745;
 }
 
 .botoes{
-    text-align:center;
-    margin-top:20px;   
+    text-align: center;
+    margin-top: 20px;   
 }
 
 .btn-return {
     position: absolute;
-    right: 10px;
+    left: 10px;
     top: 15px;
-    padding: .4rem;
-    border-radius: 100%;
-    background-color: #F2F2F2;
+    padding: .4rem .9rem;
+    background-color: transparent;
+    color: black;
     border: none;
-    box-shadow: 0px 0px 5px gray;
     cursor: pointer;
     opacity: .9;
     transition: opacity .2s;
