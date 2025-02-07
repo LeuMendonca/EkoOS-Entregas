@@ -5,7 +5,7 @@ import Select from 'react-select'
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { customStyles, ITEM_VENDA_MODAL_AGENDADOS } from './Modal';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { api } from '../../../../services/axios';
 
@@ -32,7 +32,7 @@ export default function FormularioAtualizacao({ itens_agendados , optionsEntrega
 
     type FORMULARIO_MODAL = z.infer<typeof schema>;
 
-    const { reset, register , control , handleSubmit , setValue , formState: { errors } } = useForm<FORMULARIO_MODAL>({        
+    const { register , control , handleSubmit , setValue } = useForm<FORMULARIO_MODAL>({        
         resolver: zodResolver(schema),
         defaultValues: {
             dbedEntregador: '',

@@ -6,13 +6,11 @@ import { usuarioAutenticado } from "../../../context/useAutenticacao";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import animation from '../../../components/animation.module.css'
-import { useState } from "react";
 
 export default function Login() {
 
     const AutenticacaoContext = usuarioAutenticado();
     const navigate = useNavigate()
-    const [focused, setFocused] = useState(false);
 
     const schema = z.object({
         dbedUsuario: z.string().trim().min(1,'Usuário obrigatório!'),
