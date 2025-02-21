@@ -40,7 +40,7 @@
   width: 100%;
   background-color: white;
   display: grid;
-  grid-template-columns: 150px 1fr 200px 200px;
+  grid-template-columns: 150px 1fr 200px 200px 200px;
   color: #212529;
   padding: .9rem 0rem;
   text-align: center;
@@ -55,7 +55,7 @@
 
 .row-item {
   display: grid;
-  grid-template-columns: 150px 1fr 200px 200px;
+  grid-template-columns: 150px 1fr 200px 200px 200px;
   color: #212529;
   margin-top: 3px;
   background-color: white;
@@ -145,4 +145,47 @@
 .trashIcon svg{
   color: #fd2525;
   transition: all .3s;
+}
+
+.info-null {
+  background-color: white;
+  padding: 1.5rem;
+  color: #fa0021;
+  border: 1px solid #fa0021;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-top: 1.3rem;
+  border-radius: .3rem;
+  gap: 5px;
+  
+}
+
+.statusAtivo {
+  color: #28a745;
+}
+
+.statusAtivo::before {
+  content: "";
+  display: inline-block;
+  width: 0.4rem;
+  height: .4rem;
+  background-color: #28a745;
+  border-radius: 100%;
+  margin-right: 5px;
+}
+
+.statusInativo {
+  color: #fd2525;
+}
+
+.statusInativo::before {
+  content: "";
+  display: inline-block;
+  width: 0.4rem;
+  height: .4rem;
+  background-color: #fd2525;
+  border-radius: 100%;
+  margin-right: 5px;
 }

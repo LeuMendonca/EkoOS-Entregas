@@ -5,8 +5,10 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { api } from '../../../services/axios'
 import { toast } from 'react-toastify'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { SESSAO } from '../PageEntregadores'
+import Loading from '../../../components/loading'
+import LoadingSubmit from '../../../components/loadingSubmit'
 
 interface PROPRIEDADES {
     setAba: ( aba: number ) => void;
@@ -16,12 +18,16 @@ interface PROPRIEDADES {
 
 export default function PageCadastroEntregador({ setAba , codigoEntregador , sessao }: PROPRIEDADES) {
 
+    const [ loading , setLoading ] = useState( false )
+    const [ loadingSubmit , setLoadingSubmit ] = useState( false )
+
     const schema = z.object({
         dbedNome: z.string().trim().min(1,'Nome do entregador é obrigatório!'),
         dbedEmail: z.string().trim(),
         dbedContato: z.string().trim(),
         dbedUsuario: z.string().trim().min(1,'Usuário é obrigatório!'),
-        dbedSenha: z.string().trim().min(1,'Senha é obrigatório!')
+        dbedSenha: z.string().trim().min(1,'Senha é obrigatório!'),
+        dbedStatus: z.boolean(),
     })
 
     type CADASTRO_ENTREGADOR = z.infer<typeof schema>
@@ -33,11 +39,14 @@ export default function PageCadastroEntregador({ setAba , codigoEntregador , ses
             dbedEmail: '',
             dbedNome: '',
             dbedSenha: '',
-            dbedUsuario: ''
+            dbedUsuario: '',
+            dbedStatus: true
         }
     })
 
     async function handleSubmitForm( data: CADASTRO_ENTREGADOR ){
+
+        setLoadingSubmit( true )
 
         if( codigoEntregador <= 0 ){
             
@@ -52,6 +61,7 @@ export default function PageCadastroEntregador({ setAba , codigoEntregador , ses
             if( response.data.Status == 200 ){
                 toast.success(response.data.Mensagem,{position: 'bottom-right'});
                 reset()
+                setAba(0)
             }else{
                 toast.error( response.data.Erro.causa,{position: 'bottom-right'} )
             }
@@ -70,21 +80,24 @@ export default function PageCadastroEntregador({ setAba , codigoEntregador , ses
             if( response.data.Status == 200 ){
                 toast.success(response.data.Mensagem,{position: 'bottom-right'});
                 reset()
+                setAba(0)
             }else{
                 toast.error( response.data.Erro.causa,{position: 'bottom-right'} )
             }
         }
+
+        setLoadingSubmit( false )
         
     }
     
     async function getEntregador(){
+        setLoading( true )
+
         const response = await api.get("entregadores/edit",{
             params: {
                 codigo_entregador: codigoEntregador
             }
         })
-
-        console.log( response.data )
 
         if( response.data.Status == 200 ){
             setValue("dbedNome", response.data.Entregador[0].nome )
@@ -92,7 +105,10 @@ export default function PageCadastroEntregador({ setAba , codigoEntregador , ses
             setValue("dbedSenha", response.data.Entregador[0].senha )
             setValue("dbedEmail", response.data.Entregador[0].email )
             setValue("dbedContato", response.data.Entregador[0].fone )
+            setValue("dbedStatus" , response.data.Entregador[0].status )
         }
+
+        setLoading( false )
     }
 
     useEffect(() => {
@@ -106,6 +122,7 @@ export default function PageCadastroEntregador({ setAba , codigoEntregador , ses
             <div className={styles.banner}>
                 <div className={styles.tabela}>
                     <form onSubmit={handleSubmit(handleSubmitForm)} id={styles.formulario} className={ animation.introY}>
+                        { loading && <Loading/> }
                         <button onClick={() => setAba(0)} className={ styles['btn-return'] }>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
                         </button>
@@ -162,12 +179,27 @@ export default function PageCadastroEntregador({ setAba , codigoEntregador , ses
                             />
                         </div>
 
+                        <div>
+                            <div className={`${styles["checkbox-wrapper-8"]}`}>
+                                <input {...register("dbedStatus")} className={`${styles["tgl"]} ${styles["tgl-skewed"]}`} id="cb3-8" type="checkbox"/>
+                                <label className={`${styles["tgl-btn"]}`} data-tg-off="INATIVO" data-tg-on="ATIVO" htmlFor="cb3-8"></label>
+                            </div>
+                        </div>
+
                         <div className={styles.botoes}>
                             <button 
                                 className={styles.botaocadastrar} 
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-check-check"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></svg>
-                                Salvar
+                            >   
+                                { !loadingSubmit ? 
+                                    <>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-check-check"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></svg>
+                                        Salvar
+                                    </>
+                                    : <>
+                                        Salvando
+                                        <LoadingSubmit/>
+                                    </>
+                                }
                             </button>
                         </div>
                     </form>

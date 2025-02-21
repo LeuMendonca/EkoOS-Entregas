@@ -6,11 +6,14 @@ import { usuarioAutenticado } from "../../../context/useAutenticacao";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import animation from '../../../components/animation.module.css'
+import { useState } from "react";
+import LoadingSubmit from "../../../components/loadingSubmit";
 
 export default function Login() {
 
     const AutenticacaoContext = usuarioAutenticado();
     const navigate = useNavigate()
+    const [ loading , setLoading ] = useState(false)
 
     const schema = z.object({
         dbedUsuario: z.string().trim().min(1,'Usuário obrigatório!'),
@@ -28,13 +31,19 @@ export default function Login() {
     })
 
     async function handleSubmitFormulario( data: LOGIN ){
+
+        setLoading( true )
+
         try {
             await AutenticacaoContext.autenticacao( data.dbedUsuario , data.dbedSenha )
             navigate('/entregas')
         } catch( error ) {
             toast.error("Usuário inexistente!")
         }
+
+        setLoading( false )
     }
+    
     return (
         <section className={`${styles.login}  ${ animation.introX }`}>
                 
@@ -85,8 +94,17 @@ export default function Login() {
                 </div>
 
                 <button type="submit">
-                    Acessar
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+                    { !loading ? 
+                        <>
+                        Acessar
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+                        </>
+                        : 
+                        <>
+                            Acessando
+                            <LoadingSubmit/>
+                        </>
+                    }
                 </button>
             </form>
         </section>

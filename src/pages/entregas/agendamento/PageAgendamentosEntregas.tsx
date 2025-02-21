@@ -10,6 +10,7 @@ import Pagination from '../../components/Pagination';
 import Modal from './components/Modal';
 import DropdownButton from '../../components/DropdownButton';
 import { getUserLocalStorage } from '../../../context/AutenticacaoContext';
+import Loading from '../../../components/loading';
 
 const status = [
     { value: '' , label: 'Todos'},
@@ -115,6 +116,7 @@ export default function PageAgendamentosEntregas() {
     }, [])
 
     const [ vendas , setVendas ] = useState<VENDAS[]>([])
+    const [ loading , setLoading ] = useState( true )
     const [ isActive, setIsActive ] = useState(false);
     const [ sequencialEntrega , setSequencialEntrega ] = useState(0)
     const [ atualiza , setAtualiza ] = useState( false )
@@ -145,6 +147,9 @@ export default function PageAgendamentosEntregas() {
     })
 
     async function submitForm( data: BUSCA_FORMULARIO){
+
+        setLoading( true )
+
         const response = await api.get("entregas/",{
             params: {
                 query_tipoEntrega: data.dbedTipoEntrega,
@@ -159,9 +164,13 @@ export default function PageAgendamentosEntregas() {
             setVendas( response.data.Vendas )
             setTotalVendas( response.data.TotalVendas )
         }
+
+        setLoading( false )
     }
 
     async function getEntregas(){
+        setLoading( true )
+
         const response = await api.get("entregas/",{
             params: {
                 query_tipoEntrega: '',
@@ -176,9 +185,13 @@ export default function PageAgendamentosEntregas() {
             setVendas( response.data.Vendas )
             setTotalVendas( response.data.TotalVendas )
         }
+
+        setLoading( false )
     }
 
     async function getEntregadoresOptions(){
+
+
         const response = await api.get("entregadores/options")
 
         if( response.data.Status == 200 ){
@@ -208,7 +221,11 @@ export default function PageAgendamentosEntregas() {
     },[ isActive , offset , atualiza ])
 
     return (
-        <>
+        <>  
+            { loading && 
+                <Loading/>
+            }
+
             { +sessao.seq_tenant > 0 ? 
             <div className={styles.banner}>
                 <div className={ styles.section}>
@@ -343,8 +360,6 @@ export default function PageAgendamentosEntregas() {
                     optionsVeiculos={optionsVeiculos}
                     sessao={ sessao }
                 />
-
-                
 
             </div> : <></>
             }

@@ -26,8 +26,10 @@ const DropdownButton: React.FC<PROPRIEDADES> = ({ sequencialEntrega, setSequenci
 
     const openModal = () => {
         setSequencialEntrega(sequencialEntrega);
+        
         setIsActive(true);
         setIsOpen(false);
+        
     };
 
     const handleClickOutside = (event: MouseEvent) => {

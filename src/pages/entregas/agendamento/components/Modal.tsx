@@ -9,6 +9,8 @@ import ProdutoAgendado from './ProdutoAgendado';
 import { api } from '../../../../services/axios';
 import { SESSAO } from '../PageAgendamentosEntregas';
 import { useOutletContext } from 'react-router-dom';
+import LoadingModal from '../../../../components/loadingModal';
+import LoadingSubmit from '../../../../components/loadingSubmit';
 
 interface OBJETO_SELECT {
     value: string; 
@@ -96,6 +98,8 @@ export const customStyles = {
 
 export default function Modal({ isActive , setIsActive , sequencialEntrega , optionsEntregadores , optionsVeiculos , sessao }: PROPRIEDADES) {
 
+    const [ loading , setLoading ] = useState( false )
+    const [ loadingSubmit , setLoadingSubmit ] = useState( false )
     const [ venda , setVenda ] = useState<VENDA_MODAL>({} as VENDA_MODAL)
     const [ atualiza , setAtualiza ] = useState(false)
 
@@ -108,6 +112,8 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
     const contextOutlet = useOutletContext<CONTEXT_OUTLET | null >()
 
     async function getVendaModal(){
+
+        setLoading( true )
         
         const response = await api.get("entregas/modal",{
             params: {
@@ -118,6 +124,8 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
         if( response.data.Status == 200 ){
             setVenda( response.data.Venda[0] )
         }
+
+        setLoading( false )
     }
 
     const schemaFormItem = z.object({
@@ -168,6 +176,7 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
 
     async function handleSubmitModal( data: FORMULARIO_MODAL ){
 
+        setLoadingSubmit( true )
         const response = await api.post("entregas/modal",{
             params: {
                 sequencial_entrega: sequencialEntrega,
@@ -191,9 +200,12 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
         }else{
             toast.error( response.data.Erro.causa )
         }
+        setLoadingSubmit( false )
     }
 
     async function deleteItemEntrega( sequencial: number ){
+
+        setLoading( true )
         const response = await api.delete("entregas/modal",{
             params: {
                 sequencial: sequencial,
@@ -208,6 +220,7 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
         }else{
             toast.error( response.data.Erro.causa )
         }
+        setLoading( false )
     }
 
     useEffect(() => {
@@ -222,16 +235,16 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
         const hoje = new Date();
         const dataHoje = `${hoje.getFullYear()}-${String(hoje.getUTCMonth() + 1).padStart(2, '0')}-${String(hoje.getUTCDate()).padStart(2, '0')}`;
         
-        
         setValue('dbedDataEntrega', dataHoje)
-    })
+    },[])
     
     return (
         <div>
             <form 
                 className={ isActive ? `${styles.modal} ${styles.active} ${ contextOutlet?.statusSidebar ? styles['modal-sidebar-open'] : styles['modal-sidebar-close'] }` : styles.modal }
                 onSubmit={handleSubmit(handleSubmitModal)}
-            >
+                >
+                { loading && <LoadingModal/>}
                 <button type='button' onClick={() => { setIsActive( false );reset() }} className={ styles['btn-close-modal']}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-move-left"><path d="M6 8L2 12L6 16"/><path d="M2 12H22"/></svg>
                 </button>
@@ -327,7 +340,7 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
 
                 <section  className={ styles["section-itens"]}>
                     <div className={ styles["header-itens"]}>
-                        <h2>Agendamentos Realizados { showNumeroIndicador && <span className={  styles.numberIndicador }>+{ numeroIndicador }</span> }</h2>
+                        <h2 onClick={() => setShowAccordion( state => !state)}>Agendamentos Realizados { showNumeroIndicador && <span className={  styles.numberIndicador }>+{ numeroIndicador }</span> }</h2>
 
                         <button type='button' onClick={() => setShowAccordion( state => !state)}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
@@ -369,7 +382,7 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
                                         options={optionsVeiculos}
                                         className="basic-multi-select"
                                         classNamePrefix="select"
-                                        
+                                        noOptionsMessage={() => 'Nenhum veículo encontrado!'}
                                         styles={ customStyles }
                                         value={ optionsVeiculos.find((c) => c.value === field.value) }                                          
                                         onChange={(val) => {field.onChange(val?.value)}} 
@@ -399,8 +412,17 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
 
                 <section className={ styles["section-button"]}>
                     <button className={ styles["btn-finalizar"]} type="submit">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-check-check"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></svg>
-                        <b>Finalizar</b>
+                    { !loadingSubmit ? 
+                        <>
+                            Finalizar
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
+                        </>
+                    : 
+                        <>
+                            Finalizando
+                            <LoadingSubmit/>
+                        </>
+                    }
                     </button>
                 </section>
             </form>

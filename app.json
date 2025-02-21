@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "1b275028-9812-421e-9337-1bb51186b54d"
+      }
+    },
+    "android": {
+      "package": "com.leu_mendonca.ekoos_entregas"
+    }
+  }
+}

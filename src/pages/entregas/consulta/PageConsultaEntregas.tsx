@@ -9,6 +9,7 @@ import Select from 'react-select'
 import Pagination from '../../components/Pagination';
 import ModalConsulta from './components/ModalConsulta';
 import { getUserLocalStorage } from '../../../context/AutenticacaoContext';
+import Loading from '../../../components/loading';
 
 interface OBJETO_SELECT {
     value: string;
@@ -115,7 +116,7 @@ export default function PageConsultaEntregas() {
     // Ferramentas para o modal de consulta
     const [ isActive , setIsActive ] = useState(false)
     const [ sequencialEntrega, setSequencialEntrega ] = useState(0)
-
+    const [ loading , setLoading ] = useState(false)
     const [ vendas , setVendas ] = useState<VENDAS[]>([])
 
     const [ offset , setOffset ] = useState(0)
@@ -148,6 +149,8 @@ export default function PageConsultaEntregas() {
     })
 
     async function submitFormPesquisa( data: BUSCA_FORMULARIO ){
+        setLoading( true )
+
         const response = await api.get("entregas/consultar-agendamentos",{
             params: {
                 query_veiculo: data.dbedVeiculo,
@@ -163,9 +166,14 @@ export default function PageConsultaEntregas() {
             setVendas( response.data.Vendas )
             setTotalVendas( response.data.TotalVendas )
         }
+
+        setLoading( false )
     }
 
     async function getAgendamentos(){
+
+        setLoading( true )
+
         const response = await api.get("entregas/consultar-agendamentos",{
             params: {
                 query_veiculo: '',
@@ -181,6 +189,9 @@ export default function PageConsultaEntregas() {
             setVendas( response.data.Vendas )
             setTotalVendas( response.data.TotalVendas )
         }
+     
+        setLoading( false )
+    
     }
 
     async function limparFiltros(){
@@ -210,13 +221,18 @@ export default function PageConsultaEntregas() {
     }
 
     useEffect(() => {
+
         getEntregadoresOptions()
         getVeiculoOptions()
         getAgendamentos()
+
     },[ offset ])
 
     return (
-        <>
+        <>  
+            { loading && 
+                <Loading/>
+            }
             { +sessao.seq_tenant > 0 && 
             <div className={ styles["banner"]}>
                 <div className={ styles.section}>

@@ -5,9 +5,10 @@ import Select from 'react-select'
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { customStyles, ITEM_VENDA_MODAL_AGENDADOS } from './Modal';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { api } from '../../../../services/axios';
+import LoadingSubmit from '../../../../components/loadingSubmit';
 
 interface OBJETO_SELECT {
     value: string; 
@@ -23,6 +24,8 @@ interface PROPRIEDADES {
 }
 
 export default function FormularioAtualizacao({ itens_agendados , optionsEntregadores , optionsVeiculos , setAbaCard , setAtualiza }: PROPRIEDADES) {
+
+    const [ loadingSubmit , setLoadingSubmit ] = useState( false )
 
     const schema = z.object({
         dbedEntregador: z.string(),
@@ -42,6 +45,7 @@ export default function FormularioAtualizacao({ itens_agendados , optionsEntrega
     })
 
     async function handleSubmitForm(data: FORMULARIO_MODAL ){
+        setLoadingSubmit( true )
 
         const response = await api.put("entregas/modal/agendados",{
             params: {
@@ -56,6 +60,8 @@ export default function FormularioAtualizacao({ itens_agendados , optionsEntrega
         }else{
             toast.error( response.data.Erro.causa )
         }
+
+        setLoadingSubmit( false )
     }
 
     useEffect(() => {
@@ -127,7 +133,10 @@ export default function FormularioAtualizacao({ itens_agendados , optionsEntrega
             </span>
 
             <a onClick={handleSubmit(handleSubmitForm)}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-check"><path d="M20 6 9 17l-5-5"/></svg>
+                { !loadingSubmit ? 
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-check"><path d="M20 6 9 17l-5-5"/></svg>
+                    : <LoadingSubmit/>
+                }
             </a>
         </form>
     )

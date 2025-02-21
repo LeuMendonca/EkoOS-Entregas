@@ -4,6 +4,7 @@ import animation from '../../../components/animation.module.css'
 import { api } from '../../../services/axios';
 import { toast } from 'react-toastify';
 import { SESSAO } from '../PageVeiculos';
+import Loading from '../../../components/loading';
 
 interface PROPRIEDADES {
     setCodigoVeiculo: ( codigoVeiculo: number ) => void;
@@ -15,19 +16,26 @@ interface VEICULOS {
     sequencial: number;
     nome_veiculo: string;
     placa_veiculo: string;
+    status: boolean;
 }
 
 export default function PageConsultaVeiculo({ setAba , setCodigoVeiculo , sessao }: PROPRIEDADES) {
     
     const [ veiculos , setVeiculos ] = useState<VEICULOS[]>([])
+    const [ loading , setLoading ] = useState(false)
 
     async function getVeiculos(){
+
+        setLoading( true )
+
         const response = await api.get("veiculos/")
 
         setVeiculos( response.data )
+        setLoading( false )
     }
 
     async function deleteVeiculo( sequencial_veiculo: number ){
+        setLoading( true )
         const response = await api.delete("veiculos/",{
             params: {
                 sequencial_veiculo: sequencial_veiculo,
@@ -42,6 +50,7 @@ export default function PageConsultaVeiculo({ setAba , setCodigoVeiculo , sessao
         }else{
             toast.error( response.data.Erro.causa ,{position: 'bottom-right'})
         }
+        setLoading( false )
     }
 
     useEffect(() => {
@@ -51,7 +60,7 @@ export default function PageConsultaVeiculo({ setAba , setCodigoVeiculo , sessao
     return (
     <div className={styles.banner}>
         <div className={styles.tabela}>
-
+            { loading && <Loading/> }
             
             <button className={ styles['button-novo']} onClick={() => {setAba( 1 );setCodigoVeiculo(0)}}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-circle-plus"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>
@@ -62,6 +71,7 @@ export default function PageConsultaVeiculo({ setAba , setCodigoVeiculo , sessao
                 <span>Código</span>
                 <span className={ styles['input-nome']}>Nome</span>
                 <span>Placa</span>
+                <span>Status</span>
                 <span>Ações</span>
             </div>
 
@@ -73,6 +83,12 @@ export default function PageConsultaVeiculo({ setAba , setCodigoVeiculo , sessao
                                 <span>{ veiculo.sequencial }</span>
                                 <span className={ styles['input-nome']}>{ veiculo.nome_veiculo }</span>
                                 <span>{ veiculo.placa_veiculo }</span>
+                                { 
+                                    veiculo.status ? 
+                                        <span className={ styles.statusAtivo }>Ativo</span>
+                                    : 
+                                        <span className={ styles.statusInativo }>Inativo</span>
+                                }
                                 <span >
                                     <div className={ styles["btn-acoes"]}>
                                         <a onClick={() => deleteVeiculo( veiculo.sequencial )} className={ styles.trashIcon }>
@@ -88,6 +104,13 @@ export default function PageConsultaVeiculo({ setAba , setCodigoVeiculo , sessao
                                 </span>
                             </div>
                         ))
+                }
+
+                { !veiculos &&            
+                    <div className={ styles['info-null']}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-circle-x"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+                        <span>Nenhum veiculo foi localizado!</span>
+                    </div>
                 }
             </div>
         </div>
