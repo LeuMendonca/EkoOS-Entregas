@@ -1,0 +1,58 @@
+services:
+  postgres-ekoos-entrega:
+    image: postgres:latest
+    container_name: ekoos-postgres
+    ports:
+      - 8432:5432
+    volumes:
+      - pgdata-ekoos-entrega:/var/lib/postgresql/data
+    networks:
+      - net-docker-ekoos
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: economia11
+      TZ: America/Sao_Paulo
+    restart: always
+
+  ekoos-entrega-back:
+    container_name: ekoos-entrega-back
+    build: ./Api-EkoOS-Entregas
+    hostname: ekoos-entrega-back
+    networks:
+      - net-docker-ekoos
+    restart: always
+    ports:
+      - 8989:8989
+    depends_on:
+      - postgres-ekoos-entrega
+  ekoos-entrega-front:
+    container_name: ekoos-entrega-front
+    build: ./EkoOS-Entregas
+    networks:
+      - net-docker-ekoos
+    depends_on:
+      - ekoos-entrega-back
+    volumes:
+      - volume-ekoos-entrega-front:/var/www/html
+
+  nginx:
+    container_name: nginx-ekoos-entrega
+    build: ./nginx
+    networks:
+      - net-docker-ekoos
+    ports:
+      - 80:80
+    volumes:
+      - volume-ekoos-entrega-front:/var/www/html
+    depends_on:
+      - postgres-ekoos-entrega
+      - ekoos-entrega-back
+      - ekoos-entrega-front
+    restart: always
+
+volumes:
+  pgdata-ekoos-entrega:
+  volume-ekoos-entrega-front:
+
+networks:
+  net-docker-ekoos:
