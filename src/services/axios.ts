@@ -2,7 +2,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify';
 
 export const api = axios.create({
-    baseURL: 'http://192.168.15.200:8005/api/'
+    baseURL: 'http:/ekoos-entregas.ddns.net:8989/api/'
 })
 
 api.interceptors.response.use(
