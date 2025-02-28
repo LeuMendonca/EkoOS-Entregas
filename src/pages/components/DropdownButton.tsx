@@ -110,7 +110,7 @@ const DropdownButton: React.FC<PROPRIEDADES> = ({ sequencialEntrega, setSequenci
     return (
         <div ref={dropdownRef} className={ styles.dropdown}>
             <button onClick={toggleDropdown} className={ styles['dropdown-button']}>
-                Ações
+                Opções
             </button>
             <div className={`${ styles["dropdown-content"]} ${isOpen ? styles.show : ''}`}>
                 { status != 'CANCELADO' && 

@@ -54,7 +54,6 @@ export default function ProdutoAgendado({ itens_agendados , optionsEntregadores 
         <>
             { index == 0 && (
                     <div className={`${styles["row-header-item"]}`}>
-                        <span>Cód.Produto</span>
                         <span>Descrição Produto</span>
                         <span>Quantidade</span>
                         <span>Entregador</span>
@@ -66,7 +65,6 @@ export default function ProdutoAgendado({ itens_agendados , optionsEntregadores 
 
             { abaCard == 0 ?
                 <div className={`${styles["row-item-agendado"]}`}>
-                    <span className={`${styles["disabled-input"]}`}>{itens_agendados.cod_produto}</span>
                     <span className={`${styles['input-form-text']} ${styles["disabled-input"]}`}>{itens_agendados.desc_produto}</span>
                     <span className={`${styles["disabled-input"]}`}>{itens_agendados.quantidade}</span>
                     <span className={`${styles['input-form-text']} ${styles["disabled-input"]}`}>{itens_agendados.entregador}</span>

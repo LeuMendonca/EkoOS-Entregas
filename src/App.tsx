@@ -8,6 +8,7 @@ import PageVeiculos from "./pages/veiculos/PageVeiculos.tsx";
 import PageAgendamentosEntregas from "./pages/entregas/agendamento/PageAgendamentosEntregas.tsx";
 import PageConsultaEntregas from "./pages/entregas/consulta/PageConsultaEntregas.tsx";
 import { LoginRequerido } from "./components/loginRequerido.tsx";
+import PageGerentes from "./pages/gerentes/PageGerentes.tsx";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
             element: <PageEntregadores/>
           },
           {
+            path: '/gerentes',
+            element: <PageGerentes/>
+          },
+          {
             path: '/veiculos',
             element: <PageVeiculos/>
           },
@@ -31,6 +36,7 @@ const router = createBrowserRouter([
             element: <PageAgendamentosEntregas/>,
             
           },
+          
           {
             path: '/consultar-entregas',
             element: <PageConsultaEntregas/>

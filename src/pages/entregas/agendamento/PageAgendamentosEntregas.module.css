@@ -132,7 +132,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: 100%;
     background-color: white;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 15% 1fr 10% 10% 10% 10% 10%;
     color: #212529;
     padding: .9rem 0rem;
     text-align: center;
@@ -145,21 +145,63 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     width: 100%;
   }
 
-.row-item {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    color: #212529;
-    margin-top: 3px;
+.div-item {
+
+    display: flex;
+    flex-direction: column;
     background-color: white;
     padding: .9rem 0rem;
-    align-items: center;
+    margin-top: 10px;
     border-radius: 3px;
-    text-align: center;
-    width: 100%;
     box-shadow: 0 0 1px #212529;
-    font-size: 13px;
+
 }
 
+.row-item {
+    display: grid;
+    grid-template-columns: 15% 1fr 10% 10% 10% 10% 10%;
+    color: #212529;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    font-size: 13px;
+    padding-bottom: 1rem;
+
+}
+
+.row-item::after {
+    content: "";
+    display: block;
+    grid-column: 1 / -1;
+    width: 96%;
+    height: 1px;
+    background-color: #d7d7d7;
+    margin-top: 1rem;  
+    margin: 1.5rem auto 0 auto;
+}
+
+.span-cliente{
+    display: flex;
+    flex-direction: column;
+}
+
+.span-endereco {
+    font-size: 10px;
+    color: #6c757d;
+}
+
+.div-obs {
+    width: calc(100% - 5rem);
+    font-size: 12px;
+    font-weight: bold;
+    margin-left: 2.5rem;
+    color: #212529;
+    padding: .3rem 0 ;
+}
+
+.div-obs > span {
+    font-size: 12px !important;
+}
 
 .info-null {
     background-color: white;

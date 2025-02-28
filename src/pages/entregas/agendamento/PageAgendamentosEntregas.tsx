@@ -76,6 +76,8 @@ interface VENDAS {
     status: string;
     data_venda: string;
     tipo_entrega: string;
+    observacao: string;
+    empresa: string;
 }
 
 interface OBJETO_SELECT {
@@ -96,24 +98,18 @@ export default function PageAgendamentosEntregas() {
     const[sessao, setSessao] = useState<SESSAO>(inicializaSessao)
 
     useEffect(() => {
-        
-        const sessao = getUserLocalStorage();
-
-        if (sessao) {
-
-            const dadosSessao = {   
-                seq_tenant: sessao.seq_tenant,
-                seq_tenant_user: sessao.seq_tenant_user,
-                login: sessao.login,
-                type_user: sessao.type_user, 
-                nome_empresa: sessao.nome_empresa, 
-            }
-
-            setSessao(dadosSessao)
-
-        } 
-
-    }, [])
+        const sessaoStorage = getUserLocalStorage();
+    
+        if (sessaoStorage) {
+            setSessao({
+                seq_tenant: sessaoStorage.seq_tenant,
+                seq_tenant_user: sessaoStorage.seq_tenant_user,
+                login: sessaoStorage.login,
+                type_user: sessaoStorage.type_user,
+                nome_empresa: sessaoStorage.nome_empresa,
+            });
+        }
+    }, []);
 
     const [ vendas , setVendas ] = useState<VENDAS[]>([])
     const [ loading , setLoading ] = useState( true )
@@ -126,9 +122,11 @@ export default function PageAgendamentosEntregas() {
 
     const [ optionsEntregadores , setOptionsEntregadores ] = useState<OBJETO_SELECT[]>([])
     const [ optionsVeiculos , setOptionsVeiculos ] = useState<OBJETO_SELECT[]>([])
+    const [ optionsEmpresa , setOptionsEmpresa ] = useState<OBJETO_SELECT[]>([])
 
     const schema = z.object({
         dbedPedido: z.string().optional(),
+        dbedEmpresa: z.string().optional(),
         dbedStatus: z.string().optional(),
         dbedTipoEntrega: z.string().optional(),
         dbedCliente: z.string().optional()
@@ -142,7 +140,8 @@ export default function PageAgendamentosEntregas() {
             dbedPedido: '',
             dbedStatus: 'EM ABERTO',
             dbedTipoEntrega: '',
-            dbedCliente: ''
+            dbedCliente: '',
+            dbedEmpresa: ''
         }
     })
 
@@ -156,6 +155,7 @@ export default function PageAgendamentosEntregas() {
                 query_pedido: data.dbedPedido,
                 query_status: data.dbedStatus,
                 query_cliente: data.dbedCliente,
+                query_empresa: data.dbedEmpresa,
                 offset
             }
         })
@@ -177,6 +177,7 @@ export default function PageAgendamentosEntregas() {
                 query_pedido: '',
                 query_status: 'EM ABERTO',
                 query_cliente: '',
+                query_empresa: '',
                 offset
             }
         })
@@ -207,6 +208,20 @@ export default function PageAgendamentosEntregas() {
         }
     }
 
+    async function getEmpresasFilter(){
+        const response = await api.get("empresas/options",{
+            params: {
+                seq_tenant: sessao.seq_tenant
+            }
+        })
+
+        console.log( response.data.ObjetoEmpresa )
+
+        if( response.data.Status == 200 ){
+            setOptionsEmpresa( response.data.ObjetoEmpresa )
+        }
+    }
+
     async function limparFiltros(){
         reset();
         getEntregas();
@@ -217,8 +232,15 @@ export default function PageAgendamentosEntregas() {
         getEntregas();
         getEntregadoresOptions();
         getVeiculoOptions();
+        
 
     },[ isActive , offset , atualiza ])
+
+    useEffect(() => {
+        if (sessao.seq_tenant) {
+            getEmpresasFilter();
+        }
+    }, [sessao.seq_tenant]);
 
     return (
         <>  
@@ -282,6 +304,26 @@ export default function PageAgendamentosEntregas() {
                                     }}                                        
                                 />
                             </div>
+
+                            <div className={ styles['form-control']}>
+                                <label>Empresa</label>
+                                <Controller
+                                    control={control}
+                                    name="dbedEmpresa"
+                                    render={({field}) => {  
+                                        return(
+                                            <Select
+                                                options={optionsEmpresa}
+                                                styles={customStyles}
+                                                menuPortalTarget={document.body}
+                                                placeholder="Selecione..."
+                                                value={ optionsEmpresa.find((c) => c.value === field.value) }                                          
+                                                onChange={(val) => {field.onChange(val?.value)}} 
+                                            />
+                                        )
+                                    }}                                        
+                                />
+                            </div>
                         </div>
 
                         <div className={ styles["row-btn"]}>
@@ -304,34 +346,43 @@ export default function PageAgendamentosEntregas() {
                         <div className={ styles['header-table']}>
                             <span>Pedido/Entrega</span>
                             <span className={ styles['text-left']}>Cliente</span>
-                            <span>Endereço</span>
                             <span>Tipo</span>
                             <span>Data</span>
                             <span>Status</span>
-                            <span>Ações</span>
+                            <span>Empresa</span>
                         </div>
 
                         {
                             vendas && 
                                 vendas.map( venda =>  (
-                                    <div className={ styles['row-item']}>
-                                        <span>{ venda.pedido } / { venda.sequencial }</span>
-                                        <span className={styles['text-left']}>{ venda.cliente }</span>
-                                        <span>{ venda.endereco }</span>
-                                        <span>{ venda.tipo_entrega }</span>
-                                        <span>{ venda.data_venda}</span>
-                                        <span>{ venda.status }</span>
-                                        <span>
-                                            <DropdownButton
-                                                setIsActive={ setIsActive }
-                                                setSequencialEntrega={ setSequencialEntrega }
-                                                sequencialEntrega={ venda.sequencial}
-                                                tipoEntrega={ venda.tipo_entrega }
-                                                status={ venda.status }
-                                                setAtualiza={ setAtualiza }
-                                                sessao={ sessao }
-                                            />
-                                        </span>
+                                    <div className={ styles["div-item"]}>
+                                        <div className={ styles['row-item']}>
+                                            <span>{ venda.pedido } / { venda.sequencial }</span>
+                                            <span className={`${styles['text-left']} ${ styles["span-cliente"]}`}>
+                                                <span>{ venda.cliente }</span>
+                                                <span className={ styles['span-endereco']}>{ venda.endereco }</span>
+                                            </span>
+                                            <span>{ venda.tipo_entrega }</span>
+                                            <span>{ venda.data_venda}</span>
+                                            <span>{ venda.status }</span>
+                                            <span>{ venda.empresa }</span>
+                                            <span>
+                                                <DropdownButton
+                                                    setIsActive={ setIsActive }
+                                                    setSequencialEntrega={ setSequencialEntrega }
+                                                    sequencialEntrega={ venda.sequencial}
+                                                    tipoEntrega={ venda.tipo_entrega }
+                                                    status={ venda.status }
+                                                    setAtualiza={ setAtualiza }
+                                                    sessao={ sessao }
+                                                />
+                                            </span>
+                                        </div>
+                                        { venda.observacao && 
+                                            <div className={ styles['div-obs']}>
+                                                Obs: <span>{ venda.observacao } </span>
+                                            </div>
+                                        }
                                     </div>
                                 ))
                         }

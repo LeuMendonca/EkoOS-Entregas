@@ -34,6 +34,8 @@ interface VENDA_MODAL {
     data_venda: string;
     itens_agendar: ITEM_VENDA_MODAL[];
     itens_agendados: ITEM_VENDA_MODAL_AGENDADOS[];
+    observacao: string;
+    endereco: string;
 }
 
 interface ITEM_VENDA_MODAL {
@@ -248,14 +250,29 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
                 <button type='button' onClick={() => { setIsActive( false );reset() }} className={ styles['btn-close-modal']}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-move-left"><path d="M6 8L2 12L6 16"/><path d="M2 12H22"/></svg>
                 </button>
-                <h3>Agendamento da Entrega { venda.pedido } </h3> 
+                <h3>Agendamento da Entrega { venda.pedido } / { venda.sequencial } </h3> 
 
                 <header>
+
                     <div className={ styles["row-1"]}>
-                        <span><b>Número Pedido:</b> { venda.pedido }</span>
-                        <span><b>Data:</b> { venda.data_venda }</span>
+                        <div className={ styles["div-info-entrega-header"]}>
+                            Cliente
+                            <span>{ venda.cliente }</span>
+                        </div>
+
+                        <div className={ styles["div-info-entrega-header"]}>
+                            Endereço 
+                            <span>{ venda.endereco }</span>
+                        </div>
+                        <div className={ styles["div-info-entrega-header"]}>
+                            Data
+                            <span>{ venda.data_venda }</span>
+                        </div>
                     </div>
-                    <span><b>Cliente:</b> { venda.cliente }</span>
+
+                    <div className={ styles["div-info-entrega-header"]}>
+                        Observação: <span>{ venda.observacao }</span>
+                    </div>
 
                     <span className={ styles["span-tipo-entrega"]}>{ venda.tipo_entrega }</span>
                 </header>
@@ -269,7 +286,6 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
                                 { index == 0 && 
                                     <div className={ styles["row-header"]}>
                                         <span >Sequencial</span>
-                                        <span >Cód.Produto</span>
                                         <span >Descrição Produto</span>
                                         <span >Quantidade</span>
                                         <span >Entregadores</span>
@@ -280,10 +296,6 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
                                 <div className={ styles["row-item"]}>
                                     <span>
                                         <input { ...register(`dbedSequencialItem${ item.sequencial_item }`)} type="text" className={ `${styles["input-form"]} ${styles["disabled-input"]}`} value={ item.sequencial_item }/>
-                                    </span>
-
-                                    <span>
-                                        <input { ...register(`dbedCodigoProduto${ item.sequencial_item}`)} type="text" className={ `${styles["input-form"]} ${styles["disabled-input"]}`}value={ item.codigo }/>
                                     </span>
 
                                     <span>
@@ -414,12 +426,12 @@ export default function Modal({ isActive , setIsActive , sequencialEntrega , opt
                     <button className={ styles["btn-finalizar"]} type="submit">
                     { !loadingSubmit ? 
                         <>
-                            Finalizar
+                            Agendar
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-log-in"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>
                         </>
                     : 
                         <>
-                            Finalizando
+                            Agendando
                             <LoadingSubmit/>
                         </>
                     }

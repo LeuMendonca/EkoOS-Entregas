@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import { api } from "../services/axios";
+import { toast } from "react-toastify";
 
 interface USUARIO {
     seq_tenant?: number;
@@ -53,7 +54,11 @@ export const AuthProvider = ({ children }: PROVEDOR_AUTENTICACAO) => {
             }
         }) 
 
-        console.log("Aqui está os dados do login: ", response.data )
+        if( response.data.Usuario[0].type_user == '3' ){
+            toast.error("Usuário inexistente!")
+            logout()
+            return
+        }
 
         const dadosLogin  = {   
             seq_tenant: response.data.Usuario[0].seq_tenant,

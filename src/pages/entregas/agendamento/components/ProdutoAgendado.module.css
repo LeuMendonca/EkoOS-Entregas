@@ -1,7 +1,7 @@
 .row-header-item{
     margin: 1rem 1rem ;
     display: grid;
-    grid-template-columns: 10% 25% 8% 15% 15% 5% 10%;
+    grid-template-columns: 1fr 8% 15% 15% 5% 10%;
     padding: 1rem 1.3rem ;
     align-items: center;
     gap: 20px;
@@ -15,7 +15,7 @@
 .row-item-agendado{
     margin: 1rem 1rem ;
     display: grid;
-    grid-template-columns: 10% 25% 8% 15% 15% 5% 10%;
+    grid-template-columns: 1fr 8% 15% 15% 5% 10%;
     padding: 1.6rem 1.3rem ;
     text-align: center;
     align-items: center;

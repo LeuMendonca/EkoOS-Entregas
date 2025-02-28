@@ -72,9 +72,6 @@ export default function FormularioAtualizacao({ itens_agendados , optionsEntrega
 
     return (
         <form className={`${styles["row-item-agendado"]} ${ styles["right-to-left"]}`} >
-            <span>
-                <input type="text" className={ `${styles["input-form"]} ${styles["disabled-input"]}`}value={ itens_agendados.cod_produto }/>
-            </span>
 
             <span>
 

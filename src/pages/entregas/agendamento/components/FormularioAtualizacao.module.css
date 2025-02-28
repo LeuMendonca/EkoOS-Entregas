@@ -1,18 +1,19 @@
 .row-item-agendado{
     margin: 0 1rem ;
     display: grid;
-    grid-template-columns: 8% 30% 8% 17% 15% 8% 8%;
+    grid-template-columns: 38% 8% 17% 15% 8% 8%;
     padding: 1.6rem 1.3rem ;
     align-items: center;
     gap: 20px;
     word-wrap: break-word;
     border-radius: 10px;
     background-color: #fff;
+    border: 1px solid #ccc;
 }
 
 .input-form{
     border: 1px solid #AAA;
-    border-radius: 10px;
+    border-radius: 5px;
     color: #2c2f3a;
     width: 50px;
     text-align: center;
